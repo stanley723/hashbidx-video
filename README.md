@@ -17,6 +17,8 @@ No extra Python packages are needed.
 3. Paste the key into **api_key**, leave **save_key** on, and press **Run**. Nothing is generated or charged.
 4. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
 
+A key typed into the **HashBidX API Key** node is never written into the videos and images ComfyUI saves, or into its run history. It is only kept in a workflow file if you save the workflow while the field is filled, so clear the field once the key is saved.
+
 ## Quick start
 Open **Templates > hashbidx-video** and pick one:
 

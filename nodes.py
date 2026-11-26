@@ -1,5 +1,6 @@
 import json
 import os
+import secrets
 import time
 
 from .presets import CAMERA_MOVES, DEPTHS, LENS_LOOKS, LIGHTING, SHOT_SIZES, apply_camera
@@ -98,6 +99,56 @@ def _urls(text):
     return out
 
 
+# ComfyUI writes the whole canvas into every video and image it saves and keeps it in its run history.
+# A key typed into the "HashBidX API Key" node is therefore swapped for a meaningless marker before the
+# run starts; the key itself stays in this process's memory only.
+_HIDDEN_PREFIX = "(key hidden) "
+_TYPED_KEYS = {}  # marker -> key
+_MARKERS = {}     # key -> marker (same key, same marker: an unchanged canvas stays cached)
+
+
+def _hide(key):
+    marker = _MARKERS.get(key)
+    if marker is None:
+        marker = _HIDDEN_PREFIX + secrets.token_hex(5)
+        _MARKERS[key] = marker
+        _TYPED_KEYS[marker] = key
+    return marker
+
+
+def _blank_key_widgets(obj):
+    """Empty the api_key widget of every HashBidX API Key node in a saved-canvas structure (subgraphs included)."""
+    if isinstance(obj, dict):
+        if obj.get("type") == "HashBidXAPIKey":
+            vals = obj.get("widgets_values")
+            if isinstance(vals, list) and vals:
+                vals[0] = ""  # api_key is the first widget
+            elif isinstance(vals, dict) and "api_key" in vals:
+                vals["api_key"] = ""
+        for v in obj.values():
+            _blank_key_widgets(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            _blank_key_widgets(v)
+
+
+def hide_typed_keys(json_data):
+    """Runs when a canvas is queued, before ComfyUI stores it anywhere."""
+    try:
+        graph = json_data.get("prompt") or {}
+        for node in graph.values():
+            if isinstance(node, dict) and node.get("class_type") == "HashBidXAPIKey":
+                inputs = node.get("inputs") or {}
+                key = inputs.get("api_key")
+                if isinstance(key, str) and key.strip() and not key.startswith(_HIDDEN_PREFIX):
+                    inputs["api_key"] = _hide(key.strip())
+        extra = (json_data.get("extra_data") or {}).get("extra_pnginfo") or {}
+        _blank_key_widgets(extra.get("workflow"))
+    except Exception as e:  # never block a run because of this
+        print("[HashBidX] could not hide the typed key: %s" % e)
+    return json_data
+
+
 class HashBidXAPIKey:
     """Holds the customer's own HashBidX key (BYOK). Leave empty to use the key saved on this computer."""
 
@@ -120,6 +171,10 @@ class HashBidXAPIKey:
     OUTPUT_NODE = True  # lets "Run" save the key with this node alone: nothing is generated or charged
 
     def make(self, api_key, base_url="https://hashbidx.ai/v1", save_key=False):
+        if (api_key or "").startswith(_HIDDEN_PREFIX):
+            if api_key not in _TYPED_KEYS:
+                raise HashBidXError("Please paste your HashBidX key into the api_key field again, or leave it empty to use the saved key.")
+            api_key = _TYPED_KEYS[api_key]
         key, base = resolve_credentials(api_key, base_url)
         typed = bool((api_key or "").strip())
         status = "Using the key typed in this node." if typed else "Using the key saved on this computer."

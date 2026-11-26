@@ -1,19 +1,19 @@
 {
  "id": "48286086-56b3-44f6-8978-8447853b48d9",
  "revision": 0,
- "last_node_id": 2,
+ "last_node_id": 3,
  "last_link_id": 1,
  "nodes": [
   {
    "id": 1,
    "type": "HashBidXVideo",
    "pos": [
-    430,
-    140
+    90,
+    360
    ],
    "size": [
-    400,
-    370
+    420,
+    434
    ],
    "flags": {},
    "order": 0,
@@ -24,6 +24,13 @@
      "name": "hashbidx",
      "shape": 7,
      "type": "HASHBIDX_AUTH",
+     "link": null
+    },
+    {
+     "localized_name": "camera",
+     "name": "camera",
+     "shape": 7,
+     "type": "HASHBIDX_CAMERA",
      "link": null
     },
     {
@@ -45,6 +52,13 @@
      "name": "reference_images",
      "shape": 7,
      "type": "IMAGE",
+     "link": null
+    },
+    {
+     "localized_name": "references",
+     "name": "references",
+     "shape": 7,
+     "type": "HASHBIDX_REFS",
      "link": null
     },
     {
@@ -93,6 +107,15 @@
      "link": null
     },
     {
+     "localized_name": "audio",
+     "name": "audio",
+     "type": "COMBO",
+     "widget": {
+      "name": "audio"
+     },
+     "link": null
+    },
+    {
      "localized_name": "extra_params_json",
      "name": "extra_params_json",
      "shape": 7,
@@ -133,6 +156,12 @@
      ]
     },
     {
+     "localized_name": "last_frame",
+     "name": "last_frame",
+     "type": "IMAGE",
+     "links": null
+    },
+    {
      "localized_name": "file_path",
      "name": "file_path",
      "type": "STRING",
@@ -154,10 +183,11 @@
     5,
     "720p",
     "auto",
+    "model default",
     "",
     1200,
     0,
-    "fixed"
+    "randomize"
    ],
    "widgets_values_named": {
     "model": "dreamina-seedance-2-5",
@@ -165,25 +195,26 @@
     "duration": 5,
     "resolution": "720p",
     "ratio": "auto",
+    "audio": "model default",
     "extra_params_json": "",
     "max_wait_seconds": 1200,
     "seed": 0,
-    "control_after_generate": "fixed"
+    "control_after_generate": "randomize"
    }
   },
   {
    "id": 2,
    "type": "SaveVideo",
    "pos": [
-    960,
-    140
+    580,
+    360
    ],
    "size": [
     560,
     420
    ],
    "flags": {},
-   "order": 1,
+   "order": 2,
    "mode": 0,
    "inputs": [
     {
@@ -202,20 +233,20 @@
      "link": null
     },
     {
-     "localized_name": "codec",
-     "name": "format.codec",
-     "type": "COMFY_DYNAMICCOMBO_V3",
-     "widget": {
-      "name": "format.codec"
-     },
-     "link": null
-    },
-    {
      "localized_name": "format",
      "name": "format",
      "type": "COMFY_DYNAMICCOMBO_V3",
      "widget": {
       "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
      },
      "link": null
     },
@@ -251,6 +282,32 @@
     "format.codec": "auto",
     "codec": "auto"
    }
+  },
+  {
+   "id": 3,
+   "type": "MarkdownNote",
+   "pos": [
+    90,
+    150
+   ],
+   "size": [
+    1000,
+    150
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "**Text to video**\n\n1. Pick a **model** and write your **prompt**.\n2. Set **duration** and **resolution**.\n3. Press **Run**. The clip plays in **Save Video** in about 2 to 4 minutes and is saved to ComfyUI's `output` folder.\n\nFirst time? Open the template **1 Save your HashBidX key** and run it once."
+   ],
+   "widgets_values_named": {
+    "text": "**Text to video**\n\n1. Pick a **model** and write your **prompt**.\n2. Set **duration** and **resolution**.\n3. Press **Run**. The clip plays in **Save Video** in about 2 to 4 minutes and is saved to ComfyUI's `output` folder.\n\nFirst time? Open the template **1 Save your HashBidX key** and run it once."
+   },
+   "color": "#432",
+   "bgcolor": "#653"
   }
  ],
  "links": [
@@ -267,10 +324,10 @@
  "config": {},
  "extra": {
   "ds": {
-   "scale": 0.9,
+   "scale": 0.9843400447427293,
    "offset": [
-    416,
-    110
+    0,
+    0
    ]
   }
  },

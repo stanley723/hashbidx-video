@@ -1,22 +1,22 @@
 {
  "id": "f6726492-2da4-4f2e-8a1b-6f6c03433750",
  "revision": 0,
- "last_node_id": 3,
+ "last_node_id": 4,
  "last_link_id": 2,
  "nodes": [
   {
    "id": 1,
    "type": "HashBidXVideo",
    "pos": [
-    430,
-    140
+    460,
+    360
    ],
    "size": [
-    400,
-    370
+    420,
+    434
    ],
    "flags": {},
-   "order": 0,
+   "order": 2,
    "mode": 0,
    "inputs": [
     {
@@ -24,6 +24,13 @@
      "name": "hashbidx",
      "shape": 7,
      "type": "HASHBIDX_AUTH",
+     "link": null
+    },
+    {
+     "localized_name": "camera",
+     "name": "camera",
+     "shape": 7,
+     "type": "HASHBIDX_CAMERA",
      "link": null
     },
     {
@@ -45,6 +52,13 @@
      "name": "reference_images",
      "shape": 7,
      "type": "IMAGE",
+     "link": null
+    },
+    {
+     "localized_name": "references",
+     "name": "references",
+     "shape": 7,
+     "type": "HASHBIDX_REFS",
      "link": null
     },
     {
@@ -93,6 +107,15 @@
      "link": null
     },
     {
+     "localized_name": "audio",
+     "name": "audio",
+     "type": "COMBO",
+     "widget": {
+      "name": "audio"
+     },
+     "link": null
+    },
+    {
      "localized_name": "extra_params_json",
      "name": "extra_params_json",
      "shape": 7,
@@ -133,6 +156,12 @@
      ]
     },
     {
+     "localized_name": "last_frame",
+     "name": "last_frame",
+     "type": "IMAGE",
+     "links": null
+    },
+    {
      "localized_name": "file_path",
      "name": "file_path",
      "type": "STRING",
@@ -154,10 +183,11 @@
     5,
     "720p",
     "auto",
+    "model default",
     "",
     1200,
     0,
-    "fixed"
+    "randomize"
    ],
    "widgets_values_named": {
     "model": "dreamina-seedance-2-5",
@@ -165,25 +195,26 @@
     "duration": 5,
     "resolution": "720p",
     "ratio": "auto",
+    "audio": "model default",
     "extra_params_json": "",
     "max_wait_seconds": 1200,
     "seed": 0,
-    "control_after_generate": "fixed"
+    "control_after_generate": "randomize"
    }
   },
   {
    "id": 2,
    "type": "SaveVideo",
    "pos": [
-    960,
-    140
+    950,
+    360
    ],
    "size": [
     560,
     420
    ],
    "flags": {},
-   "order": 2,
+   "order": 3,
    "mode": 0,
    "inputs": [
     {
@@ -202,20 +233,20 @@
      "link": null
     },
     {
-     "localized_name": "codec",
-     "name": "format.codec",
-     "type": "COMFY_DYNAMICCOMBO_V3",
-     "widget": {
-      "name": "format.codec"
-     },
-     "link": null
-    },
-    {
      "localized_name": "format",
      "name": "format",
      "type": "COMFY_DYNAMICCOMBO_V3",
      "widget": {
       "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
      },
      "link": null
     },
@@ -256,15 +287,15 @@
    "id": 3,
    "type": "LoadImage",
    "pos": [
-    60,
-    180
+    90,
+    400
    ],
    "size": [
     282.798828125,
-    102
+    314
    ],
    "flags": {},
-   "order": 1,
+   "order": 0,
    "mode": 0,
    "inputs": [
     {
@@ -313,9 +344,43 @@
     "image": "example.png",
     "upload": "image"
    }
+  },
+  {
+   "id": 4,
+   "type": "MarkdownNote",
+   "pos": [
+    90,
+    150
+   ],
+   "size": [
+    1000,
+    150
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "**Image to video**\n\n1. In **Load Image**, pick your still (for example a Midjourney image).\n2. In **prompt**, describe the motion and camera, not what is already in the image.\n3. Press **Run**. With **ratio** on \"auto\" the clip follows the shape of your still.\n\nFirst time? Open the template **1 Save your HashBidX key** and run it once."
+   ],
+   "widgets_values_named": {
+    "text": "**Image to video**\n\n1. In **Load Image**, pick your still (for example a Midjourney image).\n2. In **prompt**, describe the motion and camera, not what is already in the image.\n3. Press **Run**. With **ratio** on \"auto\" the clip follows the shape of your still.\n\nFirst time? Open the template **1 Save your HashBidX key** and run it once."
+   },
+   "color": "#432",
+   "bgcolor": "#653"
   }
  ],
  "links": [
+  [
+   2,
+   3,
+   0,
+   1,
+   2,
+   "IMAGE"
+  ],
   [
    1,
    1,
@@ -323,24 +388,16 @@
    2,
    0,
    "VIDEO"
-  ],
-  [
-   2,
-   3,
-   0,
-   1,
-   1,
-   "IMAGE"
   ]
  ],
  "groups": [],
  "config": {},
  "extra": {
   "ds": {
-   "scale": 0.9,
+   "scale": 0.9554140127388535,
    "offset": [
-    416,
-    110
+    0,
+    0
    ]
   }
  },

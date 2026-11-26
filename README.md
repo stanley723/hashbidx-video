@@ -11,15 +11,23 @@ No extra Python packages are needed.
 
 ## Add your key (once)
 1. Get a key on the **API Keys** page at https://hashbidx.ai.
-2. Add the **HashBidX API Key** node, paste the key, switch **save_key** on, and press Run once.
-3. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
+2. In ComfyUI open **Templates**, choose **hashbidx-video** at the bottom of the list, and open **1 Save your HashBidX key**.
+3. Paste the key into **api_key**, leave **save_key** on, and press **Run**. Nothing is generated or charged.
+4. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
 
 You can also set the environment variable `HASHBIDX_API_KEY`.
 
 ## Quick start
-Open `example_workflows/hashbidx_image_to_video.json` (drag it onto the ComfyUI canvas), pick your still in **Load Image**, describe the motion, press **Run**. The finished clip plays in the **Save Video** node.
+Open **Templates > hashbidx-video** and pick one:
 
-Other examples: `hashbidx_text_to_video.json`, and `hashbidx_two_shot_chain.json` (camera presets, a multi-shot prompt, and a second shot that continues from the first shot's last frame).
+| Template | What it does |
+|---|---|
+| **1 Save your HashBidX key** | Saves your key on this computer. Run it once. |
+| **2 Text to video** | A prompt in, a clip out. |
+| **3 Image to video** | Pick a still in **Load Image**, describe the motion, press **Run**. |
+| **4 Two-shot chain with camera presets** | A timed two-shot prompt with camera presets, then a second clip that continues from the first clip's last frame. |
+
+The finished clip plays in the **Save Video** node and is saved to `ComfyUI/output/hashbidx/`. The same files are in this plug-in's `example_workflows` folder if you prefer to drag them onto the canvas.
 
 ## Nodes
 | Node | What it does |

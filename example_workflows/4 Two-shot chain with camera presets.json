@@ -1,15 +1,15 @@
 {
  "id": "093d95ab-74c0-4138-846e-f23ccaaf145d",
  "revision": 0,
- "last_node_id": 8,
+ "last_node_id": 9,
  "last_link_id": 7,
  "nodes": [
   {
    "id": 1,
    "type": "LoadImage",
    "pos": [
-    0,
-    544
+    90,
+    904
    ],
    "size": [
     282.798828125,
@@ -58,11 +58,11 @@
     "Node name for S&R": "LoadImage"
    },
    "widgets_values": [
-    "fox_still.png",
+    "example.png",
     "image"
    ],
    "widgets_values_named": {
-    "image": "fox_still.png",
+    "image": "example.png",
     "upload": "image"
    }
   },
@@ -70,8 +70,8 @@
    "id": 2,
    "type": "HashBidXMultiShot",
    "pos": [
-    0,
-    0
+    90,
+    360
    ],
    "size": [
     400,
@@ -209,8 +209,8 @@
    "id": 3,
    "type": "HashBidXCamera",
    "pos": [
-    470,
-    0
+    560,
+    360
    ],
    "size": [
     270,
@@ -304,8 +304,8 @@
    "id": 4,
    "type": "HashBidXVideo",
    "pos": [
-    810,
-    0
+    900,
+    360
    ],
    "size": [
     430,
@@ -504,8 +504,8 @@
    "id": 5,
    "type": "HashBidXCamera",
    "pos": [
-    470,
-    544
+    560,
+    904
    ],
    "size": [
     270,
@@ -599,8 +599,8 @@
    "id": 6,
    "type": "HashBidXVideo",
    "pos": [
-    810,
-    544
+    900,
+    904
    ],
    "size": [
     430,
@@ -797,8 +797,8 @@
    "id": 7,
    "type": "SaveVideo",
    "pos": [
-    1310,
-    0
+    1400,
+    360
    ],
    "size": [
     420,
@@ -824,20 +824,20 @@
      "link": null
     },
     {
-     "localized_name": "codec",
-     "name": "format.codec",
-     "type": "COMFY_DYNAMICCOMBO_V3",
-     "widget": {
-      "name": "format.codec"
-     },
-     "link": null
-    },
-    {
      "localized_name": "format",
      "name": "format",
      "type": "COMFY_DYNAMICCOMBO_V3",
      "widget": {
       "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
      },
      "link": null
     },
@@ -878,15 +878,15 @@
    "id": 8,
    "type": "SaveVideo",
    "pos": [
-    1310,
-    544
+    1400,
+    904
    ],
    "size": [
     420,
     330
    ],
    "flags": {},
-   "order": 4,
+   "order": 8,
    "mode": 0,
    "inputs": [
     {
@@ -905,20 +905,20 @@
      "link": null
     },
     {
-     "localized_name": "codec",
-     "name": "format.codec",
-     "type": "COMFY_DYNAMICCOMBO_V3",
-     "widget": {
-      "name": "format.codec"
-     },
-     "link": null
-    },
-    {
      "localized_name": "format",
      "name": "format",
      "type": "COMFY_DYNAMICCOMBO_V3",
      "widget": {
       "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
      },
      "link": null
     },
@@ -954,6 +954,32 @@
     "format.codec": "auto",
     "codec": "auto"
    }
+  },
+  {
+   "id": 9,
+   "type": "MarkdownNote",
+   "pos": [
+    90,
+    150
+   ],
+   "size": [
+    1000,
+    150
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "**Two shots that continue each other**\n\n1. In **Load Image**, pick your still. **Multi-Shot Prompt** writes a timed prompt (2 s + 3 s) and **Camera & Lens** adds the look.\n2. Clip 1 runs on Seedance. Its **last_frame** feeds clip 2 as the first frame, so the scene continues on Wan 3.0.\n3. Press **Run**. Both clips play on the right.\n\nSwap models, shots and presets freely. Only generated video is charged."
+   ],
+   "widgets_values_named": {
+    "text": "**Two shots that continue each other**\n\n1. In **Load Image**, pick your still. **Multi-Shot Prompt** writes a timed prompt (2 s + 3 s) and **Camera & Lens** adds the look.\n2. Clip 1 runs on Seedance. Its **last_frame** feeds clip 2 as the first frame, so the scene continues on Wan 3.0.\n3. Press **Run**. Both clips play on the right.\n\nSwap models, shots and presets freely. Only generated video is charged."
+   },
+   "color": "#432",
+   "bgcolor": "#653"
   }
  ],
  "links": [
@@ -1018,10 +1044,10 @@
  "config": {},
  "extra": {
   "ds": {
-   "scale": 0.8282208588957055,
+   "scale": 0.6119610570236439,
    "offset": [
-    132.8148148148148,
-    169.03703703703704
+    0,
+    0
    ]
   }
  },

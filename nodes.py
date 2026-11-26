@@ -113,14 +113,17 @@ class HashBidXAPIKey:
             },
         }
 
-    RETURN_TYPES = ("HASHBIDX_AUTH",)
-    RETURN_NAMES = ("hashbidx",)
+    RETURN_TYPES = ("HASHBIDX_AUTH", "STRING")
+    RETURN_NAMES = ("hashbidx", "status")
     FUNCTION = "make"
     CATEGORY = "HashBidX"
+    OUTPUT_NODE = True  # lets "Run" save the key with this node alone: nothing is generated or charged
 
     def make(self, api_key, base_url="https://hashbidx.ai/v1", save_key=False):
         key, base = resolve_credentials(api_key, base_url)
-        if save_key and api_key.strip():
+        typed = bool((api_key or "").strip())
+        status = "Using the key typed in this node." if typed else "Using the key saved on this computer."
+        if save_key and typed:
             path = user_config_path()
             if path:
                 os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -131,7 +134,13 @@ class HashBidXAPIKey:
                 except OSError:
                     pass
                 print("[HashBidX] key saved to %s" % path)
-        return ({"api_key": key, "base_url": base},)
+                status = ("Key saved on this computer. Now clear the api_key field: the saved key is used from here on "
+                          "and never travels inside workflows you share. Nothing was generated or charged.")
+            else:
+                status = "Could not find the ComfyUI user folder, so the key was not saved. Set HASHBIDX_API_KEY instead."
+        elif save_key:
+            status = "Using the key saved on this computer. (The api_key field is empty, so there is nothing new to save.)"
+        return ({"api_key": key, "base_url": base}, status)
 
 
 class HashBidXVideo:

@@ -116,34 +116,43 @@ def _hide(key):
     return marker
 
 
-def _blank_key_widgets(obj):
-    """Empty the api_key widget of every HashBidX API Key node in a saved-canvas structure (subgraphs included)."""
+def _strip(obj, keys):
+    """Remove the typed key(s) from every string in a JSON-like structure, in place."""
     if isinstance(obj, dict):
-        if obj.get("type") == "HashBidXAPIKey":
-            vals = obj.get("widgets_values")
-            if isinstance(vals, list) and vals:
-                vals[0] = ""  # api_key is the first widget
-            elif isinstance(vals, dict) and "api_key" in vals:
-                vals["api_key"] = ""
-        for v in obj.values():
-            _blank_key_widgets(v)
+        for k, v in obj.items():
+            if isinstance(v, str):
+                for key in keys:
+                    if key in v:
+                        v = v.replace(key, "")
+                obj[k] = v
+            else:
+                _strip(v, keys)
     elif isinstance(obj, list):
-        for v in obj:
-            _blank_key_widgets(v)
+        for i, v in enumerate(obj):
+            if isinstance(v, str):
+                for key in keys:
+                    if key in v:
+                        v = v.replace(key, "")
+                obj[i] = v
+            else:
+                _strip(v, keys)
 
 
 def hide_typed_keys(json_data):
     """Runs when a canvas is queued, before ComfyUI stores it anywhere."""
     try:
         graph = json_data.get("prompt") or {}
+        keys = []
         for node in graph.values():
             if isinstance(node, dict) and node.get("class_type") == "HashBidXAPIKey":
                 inputs = node.get("inputs") or {}
                 key = inputs.get("api_key")
                 if isinstance(key, str) and key.strip() and not key.startswith(_HIDDEN_PREFIX):
+                    keys.append(key.strip())
                     inputs["api_key"] = _hide(key.strip())
-        extra = (json_data.get("extra_data") or {}).get("extra_pnginfo") or {}
-        _blank_key_widgets(extra.get("workflow"))
+        if keys:
+            # the copy of the canvas that ComfyUI embeds in saved files (any layout, subgraphs included)
+            _strip(json_data.get("extra_data"), keys)
     except Exception as e:  # never block a run because of this
         print("[HashBidX] could not hide the typed key: %s" % e)
     return json_data

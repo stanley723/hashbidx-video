@@ -17,8 +17,6 @@ No extra Python packages are needed.
 3. Paste the key into **api_key**, leave **save_key** on, and press **Run**. Nothing is generated or charged.
 4. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
 
-You can also set the environment variable `HASHBIDX_API_KEY`.
-
 ## Quick start
 Open **Templates > hashbidx-video** and pick one:
 

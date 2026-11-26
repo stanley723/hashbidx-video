@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.4.2"
+USER_AGENT = "ComfyUI-HashBidX/0.4.3"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -44,14 +44,14 @@ class HashBidXError(RuntimeError):
 
 
 def resolve_credentials(api_key="", base_url=""):
-    """Node input wins, then env vars, then config.json next to this file."""
+    """Node input wins, then the key saved on this computer (ComfyUI/user/hashbidx/config.json)."""
     cfg = _load_config()
-    key = (api_key or "").strip() or os.environ.get("HASHBIDX_API_KEY", "").strip() or str(cfg.get("api_key", "")).strip()
-    base = (base_url or "").strip() or os.environ.get("HASHBIDX_BASE_URL", "").strip() or str(cfg.get("base_url", "")).strip() or DEFAULT_BASE_URL
+    key = (api_key or "").strip() or str(cfg.get("api_key", "")).strip()
+    base = (base_url or "").strip() or str(cfg.get("base_url", "")).strip() or DEFAULT_BASE_URL
     if not key:
         raise HashBidXError(
-            "No HashBidX API key. Paste it into the 'HashBidX API Key' node, or set HASHBIDX_API_KEY, "
-            "or save it once with the 'HashBidX API Key' node's save_key option (stored in ComfyUI/user/hashbidx/config.json)."
+            "No HashBidX API key yet. Open Templates > hashbidx-video > '1 Save your HashBidX key', paste your key and press Run once. "
+            "Or paste the key into a 'HashBidX API Key' node connected to this node."
         )
     return key, base.rstrip("/")
 

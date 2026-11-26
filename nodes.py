@@ -99,7 +99,7 @@ def _urls(text):
 
 
 class HashBidXAPIKey:
-    """Holds the customer's own HashBidX key (BYOK). Leave empty to use HASHBIDX_API_KEY or config.json."""
+    """Holds the customer's own HashBidX key (BYOK). Leave empty to use the key saved on this computer."""
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -127,17 +127,15 @@ class HashBidXAPIKey:
             path = user_config_path()
             if path:
                 os.makedirs(os.path.dirname(path), exist_ok=True)
-                with open(path, "w", encoding="utf-8") as f:
+                # created readable by this user only
+                fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+                with os.fdopen(fd, "w", encoding="utf-8") as f:
                     json.dump({"api_key": key, "base_url": base}, f)
-                try:
-                    os.chmod(path, 0o600)
-                except OSError:
-                    pass
                 print("[HashBidX] key saved to %s" % path)
                 status = ("Key saved on this computer. Now clear the api_key field: the saved key is used from here on "
                           "and never travels inside workflows you share. Nothing was generated or charged.")
             else:
-                status = "Could not find the ComfyUI user folder, so the key was not saved. Set HASHBIDX_API_KEY instead."
+                status = "Could not find the ComfyUI user folder, so the key was not saved. Keep the key in this node instead."
         elif save_key:
             status = "Using the key saved on this computer. (The api_key field is empty, so there is nothing new to save.)"
         return ({"api_key": key, "base_url": base}, status)

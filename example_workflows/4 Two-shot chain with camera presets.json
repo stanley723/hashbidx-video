@@ -5,73 +5,11 @@
  "last_link_id": 7,
  "nodes": [
   {
-   "id": 1,
-   "type": "LoadImage",
-   "pos": [
-    90,
-    904
-   ],
-   "size": [
-    282.798828125,
-    314
-   ],
-   "flags": {},
-   "order": 0,
-   "mode": 0,
-   "inputs": [
-    {
-     "localized_name": "image",
-     "name": "image",
-     "type": "COMBO",
-     "widget": {
-      "name": "image"
-     },
-     "link": null
-    },
-    {
-     "localized_name": "choose file to upload",
-     "name": "upload",
-     "type": "IMAGEUPLOAD",
-     "widget": {
-      "name": "upload"
-     },
-     "link": null
-    }
-   ],
-   "outputs": [
-    {
-     "localized_name": "IMAGE",
-     "name": "IMAGE",
-     "type": "IMAGE",
-     "links": [
-      3
-     ]
-    },
-    {
-     "localized_name": "MASK",
-     "name": "MASK",
-     "type": "MASK",
-     "links": null
-    }
-   ],
-   "properties": {
-    "Node name for S&R": "LoadImage"
-   },
-   "widgets_values": [
-    "example.png",
-    "image"
-   ],
-   "widgets_values_named": {
-    "image": "example.png",
-    "upload": "image"
-   }
-  },
-  {
    "id": 2,
    "type": "HashBidXMultiShot",
    "pos": [
     90,
-    360
+    470
    ],
    "size": [
     400,
@@ -209,11 +147,11 @@
    "id": 3,
    "type": "HashBidXCamera",
    "pos": [
-    560,
-    360
+    550,
+    150
    ],
    "size": [
-    270,
+    283,
     174
    ],
    "flags": {},
@@ -304,8 +242,8 @@
    "id": 4,
    "type": "HashBidXVideo",
    "pos": [
-    900,
-    360
+    893,
+    150
    ],
    "size": [
     430,
@@ -334,7 +272,7 @@
      "name": "first_frame",
      "shape": 7,
      "type": "IMAGE",
-     "link": 3
+     "link": null
     },
     {
      "localized_name": "last_frame",
@@ -504,11 +442,11 @@
    "id": 5,
    "type": "HashBidXCamera",
    "pos": [
-    560,
-    904
+    550,
+    654
    ],
    "size": [
-    270,
+    283,
     174
    ],
    "flags": {},
@@ -599,8 +537,8 @@
    "id": 6,
    "type": "HashBidXVideo",
    "pos": [
-    900,
-    904
+    893,
+    654
    ],
    "size": [
     430,
@@ -797,8 +735,8 @@
    "id": 7,
    "type": "SaveVideo",
    "pos": [
-    1400,
-    360
+    1383,
+    150
    ],
    "size": [
     420,
@@ -878,8 +816,8 @@
    "id": 8,
    "type": "SaveVideo",
    "pos": [
-    1400,
-    904
+    1383,
+    654
    ],
    "size": [
     420,
@@ -963,8 +901,8 @@
     150
    ],
    "size": [
-    1000,
-    150
+    400,
+    250
    ],
    "flags": {},
    "order": 4,
@@ -973,7 +911,7 @@
    "outputs": [],
    "properties": {},
    "widgets_values": [
-    "**Two shots that continue each other**\n\n1. In **Load Image**, pick your still. **Multi-Shot Prompt** writes a timed prompt (2 s + 3 s) and **Camera & Lens** adds the look.\n2. Clip 1 runs on Seedance. Its **last_frame** feeds clip 2 as the first frame, so the scene continues on Wan 3.0.\n3. Press **Run**. Both clips play on the right.\n\nSwap models, shots and presets freely. Only generated video is charged."
+    "**Two shots that continue each other**\n\n1. **Multi-Shot Prompt** times the shots, **Camera & Lens** sets the look.\n2. Clip 1 (Seedance) hands its **last_frame** to clip 2 (Wan 3.0) as the first frame.\n3. Press **Run**. Both clips play on the right.\n\nTo start from your own still, connect a **Load Image** node to clip 1's **first_frame**. Swap models, shots and presets freely. Only generated video is charged."
    ],
    "widgets_values_named": {
     "text": "**Two shots that continue each other**\n\n1. In **Load Image**, pick your still. **Multi-Shot Prompt** writes a timed prompt (2 s + 3 s) and **Camera & Lens** adds the look.\n2. Clip 1 runs on Seedance. Its **last_frame** feeds clip 2 as the first frame, so the scene continues on Wan 3.0.\n3. Press **Run**. Both clips play on the right.\n\nSwap models, shots and presets freely. Only generated video is charged."
@@ -998,14 +936,6 @@
    4,
    1,
    "HASHBIDX_CAMERA"
-  ],
-  [
-   3,
-   1,
-   0,
-   4,
-   2,
-   "IMAGE"
   ],
   [
    4,
@@ -1044,10 +974,10 @@
  "config": {},
  "extra": {
   "ds": {
-   "scale": 0.6119610570236439,
+   "scale": 0.8,
    "offset": [
     0,
-    0
+    -60
    ]
   }
  },

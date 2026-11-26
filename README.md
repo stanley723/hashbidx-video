@@ -1,10 +1,12 @@
-# ComfyUI-HashBidX
+# HashBidX Video for ComfyUI
+
+![HashBidX Video for ComfyUI](https://raw.githubusercontent.com/stanley723/hashbidx-video/main/assets/banner.jpg)
 
 Use your own HashBidX API key inside ComfyUI to generate video with Seedance 2.5 / 2.0, MiniMax H3 and Wan 3.0.
 No Comfy credits are used: generation is billed to your HashBidX account.
 
 ## Install
-- **ComfyUI Manager:** open Manager, search **HashBidX**, click Install, restart ComfyUI. Or run `comfy node install hashbidx-video`.
+- **In ComfyUI:** click the **Extensions** button (top right) to open the Nodes Manager, search **HashBidX**, click **Install**, then **Apply Changes** to restart ComfyUI. Or run `comfy node install hashbidx-video`.
 - **Manual:** copy this folder into `ComfyUI/custom_nodes/` and restart ComfyUI.
 
 No extra Python packages are needed.

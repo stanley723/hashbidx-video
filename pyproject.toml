@@ -1,7 +1,7 @@
 [project]
 name = "hashbidx-video"
 description = "Generate video in ComfyUI with your own HashBidX API key: Seedance 2.5 / 2.0, MiniMax H3 and Wan 3.0. Text-to-video, first/last frame, references, camera and lens presets, multi-shot prompts, last-frame chaining."
-version = "0.4.1"
+version = "0.4.2"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
 dependencies = []
@@ -14,5 +14,6 @@ Documentation = "https://hashbidx.ai/docs"
 [tool.comfy]
 PublisherId = "hashbidx"
 DisplayName = "HashBidX Video (Seedance, MiniMax H3, Wan)"
-Icon = ""
+Icon = "https://raw.githubusercontent.com/stanley723/hashbidx-video/main/assets/icon.png"
+Banner = "https://raw.githubusercontent.com/stanley723/hashbidx-video/main/assets/banner.jpg"
 requires-comfyui = ">=0.3.0"

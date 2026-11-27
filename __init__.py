@@ -15,9 +15,11 @@ try:
 
     import folder_paths
 
-    _src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hashbidx_example_still.jpg")
+    _src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sample_media", "hashbidx_example_still.jpg")
     _dst = os.path.join(folder_paths.get_input_directory(), "hashbidx_example_still.jpg")
-    if os.path.exists(_src) and not os.path.exists(_dst):
+    if not os.path.exists(_src):
+        print("[HashBidX] the sample still is missing from the plug-in folder: %s" % _src)
+    elif not os.path.exists(_dst):
         os.makedirs(os.path.dirname(_dst), exist_ok=True)
         shutil.copyfile(_src, _dst)
 except Exception as e:

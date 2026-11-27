@@ -1,0 +1,498 @@
+{
+  "id": "656e8c40-020d-4fb4-8c16-aebd350cbb1b",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        90,
+        150
+      ],
+      "size": [
+        400,
+        250
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "**Make the picture first, then film it**\n\n1. **HashBidX Image** makes the opening picture from its prompt (shown below it).\n2. **HashBidX Video** uses that picture as the first frame: its prompt describes the motion and the camera.\n3. Press **Run**.\n\nUse the same box to make storyboard frames or a character sheet. Connect a **Load Image** to **reference_image** to change or restyle an existing picture. Pictures and video are charged per run."
+      ],
+      "widgets_values_named": {
+        "text": "**Make the picture first, then film it**\n\n1. **HashBidX Image** makes the opening picture from its prompt (shown below it).\n2. **HashBidX Video** uses that picture as the first frame: its prompt describes the motion and the camera.\n3. Press **Run**.\n\nUse the same box to make storyboard frames or a character sheet. Connect a **Load Image** to **reference_image** to change or restyle an existing picture. Pictures and video are charged per run."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "HashBidXImage",
+      "pos": [
+        90,
+        470
+      ],
+      "size": [
+        400,
+        240
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": null
+        },
+        {
+          "localized_name": "reference_image",
+          "name": "reference_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "count",
+          "name": "count",
+          "type": "INT",
+          "widget": {
+            "name": "count"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "file_paths",
+          "name": "file_paths",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXImage"
+      },
+      "widgets_values": [
+        "qwen-image-3.0",
+        "A plain insulated steel water bottle with no logo and no text, standing on a snowy rock at sunrise, mountains behind, product photo.",
+        "16:9",
+        1,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "qwen-image-3.0",
+        "prompt": "A plain insulated steel water bottle with no logo and no text, standing on a snowy rock at sunrise, mountains behind, product photo.",
+        "ratio": "16:9",
+        "count": 1,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 3,
+      "type": "PreviewImage",
+      "pos": [
+        90,
+        780
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 4,
+      "type": "HashBidXVideo",
+      "pos": [
+        550,
+        150
+      ],
+      "size": [
+        430,
+        434
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": null
+        },
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "shape": 7,
+          "type": "HASHBIDX_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "reference_images",
+          "name": "reference_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "references",
+          "name": "references",
+          "shape": 7,
+          "type": "HASHBIDX_REFS",
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extra_params_json",
+          "name": "extra_params_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "extra_params_json"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_wait_seconds",
+          "name": "max_wait_seconds",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_wait_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXVideo"
+      },
+      "widgets_values": [
+        "dreamina-seedance-2-0-mini",
+        "The camera slowly orbits the bottle while light snow drifts past in the wind.",
+        5,
+        "480p",
+        "auto",
+        "off",
+        "",
+        1200,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "dreamina-seedance-2-0-mini",
+        "prompt": "The camera slowly orbits the bottle while light snow drifts past in the wind.",
+        "duration": 5,
+        "resolution": "480p",
+        "ratio": "auto",
+        "audio": "off",
+        "extra_params_json": "",
+        "max_wait_seconds": 1200,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 5,
+      "type": "SaveVideo",
+      "pos": [
+        1040,
+        150
+      ],
+      "size": [
+        460,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 3
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "hashbidx/picture_first",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "hashbidx/picture_first",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      2,
+      "IMAGE"
+    ],
+    [
+      3,
+      4,
+      0,
+      5,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        0,
+        -60
+      ]
+    }
+  },
+  "version": 0.4
+}

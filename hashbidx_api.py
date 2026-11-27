@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.4.7"
+USER_AGENT = "ComfyUI-HashBidX/0.5.0"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -62,7 +62,7 @@ class Client:
         self.base = base_url.rstrip("/")
         self.timeout = timeout
 
-    def _request(self, method, path, body=None, raw=False):
+    def _request(self, method, path, body=None, raw=False, timeout=None):
         url = self.base + "/" + path.lstrip("/")
         data = None
         headers = {"Authorization": "Bearer " + self.key, "User-Agent": USER_AGENT}
@@ -71,7 +71,7 @@ class Client:
             headers["Content-Type"] = "application/json"
         req = urllib.request.Request(url, data=data, method=method, headers=headers)
         try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+            with urllib.request.urlopen(req, timeout=timeout or self.timeout) as resp:
                 payload = resp.read()
                 if raw:
                     return payload, resp.headers.get("Content-Type", "")
@@ -91,6 +91,28 @@ class Client:
 
     def create_video(self, body):
         return self._request("POST", "videos", body)
+
+    def create_image(self, body):
+        """POST /images/generations (OpenAI images style). Can take a minute or more."""
+        return self._request("POST", "images/generations", body, timeout=600)
+
+    def chat(self, body):
+        """POST /chat/completions (OpenAI chat style), not streamed."""
+        return self._request("POST", "chat/completions", body, timeout=300)
+
+    def video_link(self, task_id):
+        """Temporary web link of a finished clip, as reported by the task (used to extend or edit that clip)."""
+        info = self.get_video(task_id)
+        status = str(info.get("status", "")).lower()
+        if status not in ("completed", "succeeded", "success"):
+            raise HashBidXError("Clip %s is not finished yet (status: %s)." % (task_id, status or "unknown"))
+        content = info.get("content") if isinstance(info.get("content"), dict) else {}
+        url = info.get("video_url") or content.get("video_url") or info.get("url")
+        if not url:
+            raise HashBidXError(
+                "The API did not return a web link for clip %s, so it cannot be used as a source. "
+                "Put a public https link to the clip into source_video_url instead." % task_id)
+        return url, info
 
     def get_video(self, task_id):
         return self._request("GET", "videos/" + urllib.parse.quote(task_id, safe=""))
@@ -121,6 +143,16 @@ class Client:
                     % (task_id, status, max_wait_seconds, task_id)
                 )
             time.sleep(poll_seconds)
+
+
+def download_url(url, timeout=300):
+    """Fetch a result file (image) from the link the API returned."""
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.read()
+    except Exception as e:
+        raise HashBidXError("Could not download the result: %s" % e) from None
 
 
 def image_tensor_to_data_uri(image):

@@ -1,4 +1,4 @@
-"""Camera / shot presets. The video APIs (Seedance 2.x, MiniMax H3, Wan 3.0) have no camera parameters,
+"""Camera, look and pacing presets. The video APIs (Seedance 2.x, MiniMax H3, Wan 3.0) have no camera parameters,
 so presets are written into the prompt as plain cinematography language, which these models follow."""
 
 SHOT_SIZES = {
@@ -66,17 +66,67 @@ LIGHTING = {
 }
 
 
-def camera_text(shot_size="none", camera_move="none", lens_look="none", depth_of_field="none", lighting="none"):
+GENRES = {
+    "none": "",
+    "action": "Genre: action film, kinetic and intense",
+    "epic": "Genre: epic, grand scale and sweeping scope",
+    "drama": "Genre: drama, intimate and emotional",
+    "comedy": "Genre: comedy, light and playful tone",
+    "horror": "Genre: horror, tense and unsettling",
+    "documentary": "Genre: documentary, observational and real",
+    "commercial / ad": "Genre: premium TV commercial, polished and product-focused",
+    "music video": "Genre: music video, stylish and rhythmic",
+    "anime": "Genre: anime, hand-drawn Japanese animation style",
+}
+
+ERAS = {
+    "none": "",
+    "1950s Technicolor": "1950s Technicolor look, saturated primary colors",
+    "1970s film": "1970s film stock, warm tones, soft halation and grain",
+    "1980s VHS": "1980s VHS look, soft detail, scan lines and color bleed",
+    "1990s 35mm": "1990s 35mm film look, natural contrast and fine grain",
+    "2000s digital": "early 2000s digital video look",
+    "modern": "modern high-end digital cinema look",
+}
+
+COLOR_GRADES = {
+    "none": "",
+    "teal and orange": "teal-and-orange color grade",
+    "warm": "warm color grade with amber highlights",
+    "cool": "cool color grade with blue shadows",
+    "desaturated (bleach bypass)": "desaturated bleach-bypass color grade",
+    "black and white": "black and white",
+    "pastel": "soft pastel color palette",
+    "vivid high contrast": "vivid, high-contrast color grade",
+}
+
+PACING = {
+    "none": "",
+    "calm": "Calm pacing with slow, unhurried movement",
+    "dynamic": "Dynamic pacing with energetic movement",
+    "chaotic": "Chaotic, frantic pacing",
+    "single continuous take": "One continuous take with no cuts",
+}
+
+
+def camera_text(shot_size="none", camera_move="none", lens_look="none", depth_of_field="none", lighting="none",
+                second_move="none", genre="none", era_look="none", color_grade="none", pacing="none"):
     parts = []
     s = SHOT_SIZES.get(shot_size, "")
     m = CAMERA_MOVES.get(camera_move, "")
+    m2 = CAMERA_MOVES.get(second_move, "")
+    if m and m2:
+        m = "%s, then %s" % (m, m2)
+    elif m2:
+        m = m2
     if s and m:
         parts.append("%s, %s." % (s, m))
     elif s:
         parts.append("%s." % s)
     elif m:
         parts.append(m[0].upper() + m[1:] + ".")
-    for table, key in ((LENS_LOOKS, lens_look), (DEPTHS, depth_of_field), (LIGHTING, lighting)):
+    for table, key in ((LENS_LOOKS, lens_look), (DEPTHS, depth_of_field), (LIGHTING, lighting),
+                       (ERAS, era_look), (COLOR_GRADES, color_grade), (GENRES, genre), (PACING, pacing)):
         t = table.get(key, "")
         if t:
             parts.append(t[0].upper() + t[1:] + ".")

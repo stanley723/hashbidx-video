@@ -1,0 +1,560 @@
+{
+  "id": "82ee22a5-e9ef-4eb6-879f-c99a58e58591",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        90,
+        150
+      ],
+      "size": [
+        400,
+        270
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "**Extend a clip**\n\n1. The first **HashBidX Video** box makes a clip.\n2. **Extend / Edit Clip** continues it: its prompt says what happens next. The line from **task_id** to **source_task_id** tells it which clip to continue.\n3. Press **Run**. The box on the right plays both parts as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip."
+      ],
+      "widgets_values_named": {
+        "text": "**Extend a clip**\n\n1. The first **HashBidX Video** box makes a clip.\n2. **Extend / Edit Clip** continues it: its prompt says what happens next. The line from **task_id** to **source_task_id** tells it which clip to continue.\n3. Press **Run**. The box on the right plays both parts as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "HashBidXVideo",
+      "pos": [
+        550,
+        150
+      ],
+      "size": [
+        430,
+        434
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": null
+        },
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "shape": 7,
+          "type": "HASHBIDX_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "reference_images",
+          "name": "reference_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "references",
+          "name": "references",
+          "shape": 7,
+          "type": "HASHBIDX_REFS",
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extra_params_json",
+          "name": "extra_params_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "extra_params_json"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_wait_seconds",
+          "name": "max_wait_seconds",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_wait_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXVideo"
+      },
+      "widgets_values": [
+        "dreamina-seedance-2-0-mini",
+        "A red fox walks through fresh snow toward the camera at sunrise. Medium shot, the camera stays still.",
+        5,
+        "480p",
+        "16:9",
+        "off",
+        "",
+        1200,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "dreamina-seedance-2-0-mini",
+        "prompt": "A red fox walks through fresh snow toward the camera at sunrise. Medium shot, the camera stays still.",
+        "duration": 5,
+        "resolution": "480p",
+        "ratio": "16:9",
+        "audio": "off",
+        "extra_params_json": "",
+        "max_wait_seconds": 1200,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 3,
+      "type": "HashBidXExtendEdit",
+      "pos": [
+        1040,
+        150
+      ],
+      "size": [
+        430,
+        444
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": null
+        },
+        {
+          "localized_name": "references",
+          "name": "references",
+          "shape": 7,
+          "type": "HASHBIDX_REFS",
+          "link": null
+        },
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "shape": 7,
+          "type": "HASHBIDX_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "join_with_source",
+          "name": "join_with_source",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "join_with_source"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "source_task_id",
+          "name": "source_task_id",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "source_task_id"
+          },
+          "link": 1
+        },
+        {
+          "localized_name": "source_video_url",
+          "name": "source_video_url",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "source_video_url"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_wait_seconds",
+          "name": "max_wait_seconds",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_wait_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            2
+          ]
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "new_part",
+          "name": "new_part",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXExtendEdit"
+      },
+      "widgets_values": [
+        "extend (continue the clip)",
+        "The fox stops, looks to the left, then trots out of frame to the right.",
+        "dreamina-seedance-2-0-mini",
+        5,
+        "same as source",
+        "same as source",
+        "off",
+        true,
+        "",
+        "",
+        1200,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "mode": "extend (continue the clip)",
+        "prompt": "The fox stops, looks to the left, then trots out of frame to the right.",
+        "model": "dreamina-seedance-2-0-mini",
+        "duration": 5,
+        "resolution": "same as source",
+        "ratio": "same as source",
+        "audio": "off",
+        "join_with_source": true,
+        "source_task_id": "",
+        "source_video_url": "",
+        "max_wait_seconds": 1200,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 4,
+      "type": "SaveVideo",
+      "pos": [
+        1530,
+        150
+      ],
+      "size": [
+        460,
+        360
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 2
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "hashbidx/extended",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "hashbidx/extended",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      3,
+      3,
+      11,
+      "STRING"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        0,
+        -60
+      ]
+    }
+  },
+  "version": 0.4
+}

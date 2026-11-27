@@ -3,8 +3,10 @@ import os
 import secrets
 import time
 
-from .presets import CAMERA_MOVES, DEPTHS, LENS_LOOKS, LIGHTING, SHOT_SIZES, apply_camera
-from .hashbidx_api import Client, HashBidXError, image_file_to_data_uri, image_tensor_to_data_uri, resolve_credentials, user_config_path
+from .presets import (CAMERA_MOVES, COLOR_GRADES, DEPTHS, ERAS, GENRES, LENS_LOOKS, LIGHTING, PACING, SHOT_SIZES,
+                      apply_camera)
+from .hashbidx_api import (Client, HashBidXError, download_url, image_file_to_data_uri, image_tensor_to_data_uri,
+                           resolve_credentials, user_config_path)
 
 # Model IDs as listed by GET /v1/models on hashbidx.ai (checked 2026-11-26).
 # Typical limits, for the README only; the API itself validates each model and returns a clear 400.
@@ -249,10 +251,7 @@ class HashBidXVideo:
                  max_wait_seconds=1200, seed=0):
         if not prompt.strip():
             raise HashBidXError("prompt is required.")
-        if hashbidx and hashbidx.get("api_key"):
-            key, base = hashbidx["api_key"], hashbidx["base_url"]
-        else:
-            key, base = resolve_credentials()
+        key, base = _auth(hashbidx)
         extra = None
         if extra_params_json.strip():
             try:
@@ -274,31 +273,12 @@ class HashBidXVideo:
             image_tensor_to_data_uri(last_frame) if last_frame is not None else None,
             ref_uris, extra, audio, ref_videos, ref_audios,
         )
-        client = Client(key, base)
-        created = client.create_video(body)
-        task_id = created.get("id")
-        if not task_id:
-            raise HashBidXError("API did not return a task id: %s" % json.dumps(created)[:500])
-        print("[HashBidX] %s task %s %s" % (model, task_id, created.get("status")))
-
-        pbar = _progress_bar()
-
-        def on_progress(info):
-            p = info.get("progress")
-            if pbar is not None and isinstance(p, (int, float)):
-                pbar.update_absolute(int(p), 100)
-            print("[HashBidX] %s %s %s%%" % (task_id, info.get("status"), p))
-
-        # The create call can wait ~60 s and may already return a completed task.
-        if str(created.get("status", "")).lower() != "completed":
-            client.wait(task_id, max_wait_seconds=max_wait_seconds, on_progress=on_progress)
-        data = client.download_video(task_id)
-        path = _save(data, model, task_id)
+        path, task_id = _run_video(Client(key, base), model, body, max_wait_seconds)
         return {"ui": {"text": [path]}, "result": (_to_video(path), _last_frame(path), path, task_id)}
 
 
 class HashBidXCamera:
-    """Camera, lens and lighting presets. The video APIs have no camera parameters, so these are added to the
+    """Camera, lens, lighting, genre, era, colour and pacing presets. The video APIs have no camera parameters, so these are added to the
     prompt as cinematography directions, which Seedance, MiniMax H3 and Wan follow."""
 
     @classmethod
@@ -310,7 +290,15 @@ class HashBidXCamera:
                 "lens_look": (list(LENS_LOOKS.keys()), {"default": "none"}),
                 "depth_of_field": (list(DEPTHS.keys()), {"default": "none"}),
                 "lighting": (list(LIGHTING.keys()), {"default": "none"}),
-            }
+            },
+            # added in 0.5.0 at the end, so canvases saved with older versions keep their values
+            "optional": {
+                "second_move": (list(CAMERA_MOVES.keys()), {"default": "none", "tooltip": "A second camera move that follows the first one."}),
+                "genre": (list(GENRES.keys()), {"default": "none"}),
+                "era_look": (list(ERAS.keys()), {"default": "none", "tooltip": "Film stock and look of a decade."}),
+                "color_grade": (list(COLOR_GRADES.keys()), {"default": "none"}),
+                "pacing": (list(PACING.keys()), {"default": "none"}),
+            },
         }
 
     RETURN_TYPES = ("HASHBIDX_CAMERA", "STRING")
@@ -318,9 +306,11 @@ class HashBidXCamera:
     FUNCTION = "make"
     CATEGORY = "HashBidX"
 
-    def make(self, shot_size, camera_move, lens_look, depth_of_field, lighting):
+    def make(self, shot_size, camera_move, lens_look, depth_of_field, lighting, second_move="none", genre="none",
+             era_look="none", color_grade="none", pacing="none"):
         cam = {"shot_size": shot_size, "camera_move": camera_move, "lens_look": lens_look,
-               "depth_of_field": depth_of_field, "lighting": lighting}
+               "depth_of_field": depth_of_field, "lighting": lighting, "second_move": second_move, "genre": genre,
+               "era_look": era_look, "color_grade": color_grade, "pacing": pacing}
         from .presets import camera_text
         return (cam, camera_text(**cam))
 
@@ -378,15 +368,16 @@ class HashBidXReferencePack:
             },
         }
 
-    RETURN_TYPES = ("HASHBIDX_REFS", "INT")
-    RETURN_NAMES = ("references", "image_count")
+    RETURN_TYPES = ("HASHBIDX_REFS", "INT", "STRING")
+    RETURN_NAMES = ("references", "image_count", "legend")
     FUNCTION = "make"
     CATEGORY = "HashBidX"
 
     def make(self, image_folder, max_images, video_urls, audio_urls, images=None):
-        uris = []
+        uris, names = [], []
         if images is not None:
             uris += [image_tensor_to_data_uri(images[i:i + 1]) for i in range(len(images))]
+            names += ["picture %d from the images input" % (i + 1) for i in range(len(images))]
         folder = image_folder.strip().strip('"')
         if folder:
             folder = os.path.expanduser(folder)
@@ -395,11 +386,45 @@ class HashBidXReferencePack:
             for name in sorted(os.listdir(folder)):
                 if name.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
                     uris.append(image_file_to_data_uri(os.path.join(folder, name)))
-        uris = uris[:max_images]
+                    names.append(name)
+        uris, names = uris[:max_images], names[:max_images]
         refs = {"images": uris, "videos": _urls(video_urls), "audios": _urls(audio_urls)}
         if not (refs["images"] or refs["videos"] or refs["audios"]):
             raise HashBidXError("Reference Pack is empty: add an image folder, images, or links.")
-        return (refs, len(uris))
+        # How to point at each reference from the prompt ("Image 1", "Video 1", "Audio 1": the order they are sent in).
+        legend = ["Image %d = %s" % (i + 1, n) for i, n in enumerate(names)]
+        legend += ["Video %d = %s" % (i + 1, u) for i, u in enumerate(refs["videos"])]
+        legend += ["Audio %d = %s" % (i + 1, u) for i, u in enumerate(refs["audios"])]
+        return (refs, len(uris), "\n".join(legend))
+
+
+def _auth(hashbidx):
+    if hashbidx and hashbidx.get("api_key"):
+        return hashbidx["api_key"], hashbidx["base_url"]
+    return resolve_credentials()
+
+
+def _run_video(client, model, body, max_wait_seconds):
+    """Create the task, wait for it, download the clip. Returns (file path, task id)."""
+    created = client.create_video(body)
+    task_id = created.get("id")
+    if not task_id:
+        raise HashBidXError("API did not return a task id: %s" % json.dumps(created)[:500])
+    print("[HashBidX] %s task %s %s" % (model, task_id, created.get("status")))
+
+    pbar = _progress_bar()
+
+    def on_progress(info):
+        p = info.get("progress")
+        if pbar is not None and isinstance(p, (int, float)):
+            pbar.update_absolute(int(p), 100)
+        print("[HashBidX] %s %s %s%%" % (task_id, info.get("status"), p))
+
+    # The create call can wait ~60 s and may already return a completed task.
+    if str(created.get("status", "")).lower() != "completed":
+        client.wait(task_id, max_wait_seconds=max_wait_seconds, on_progress=on_progress)
+    data = client.download_video(task_id)
+    return _save(data, model, task_id), task_id
 
 
 def _last_frame(path):
@@ -450,12 +475,357 @@ def _to_video(path):
         return path
 
 
+SEEDANCE_IDS = [m for m in MODEL_IDS if "seedance" in m]
+EXTEND, EDIT = "extend (continue the clip)", "edit (change something, keep the rest)"
+_JOINED = {}  # task id -> the joined clip made in this session, so a second extension joins onto the whole clip
+
+
+class HashBidXExtendEdit:
+    """Continue a finished clip (extend) or change something in it and keep the rest (edit). The source is a
+    clip made by a HashBidX Video node (connect its task_id) or any clip with a public https link."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "mode": ([EXTEND, EDIT], {"default": EXTEND}),
+                "prompt": ("STRING", {"multiline": True, "default": "", "placeholder": "Extend: what happens next.  Edit: what to change."}),
+                "model": (SEEDANCE_IDS, {"default": "dreamina-seedance-2-5"}),
+                "duration": ("INT", {"default": 5, "min": 0, "max": 30, "step": 1, "tooltip": "Seconds of the new part. For an edit, use the length of the source clip. 0 = model default."}),
+                "resolution": (["same as source", "480p", "720p", "1080p"], {"default": "same as source"}),
+                "ratio": (["same as source"] + [r for r in RATIOS if r not in ("auto", "adaptive")], {"default": "same as source"}),
+                "audio": (AUDIO_MODES, {"default": "model default"}),
+                "join_with_source": ("BOOLEAN", {"default": True, "tooltip": "Extend only: the video output is the source clip and the new part as one clip."}),
+            },
+            "optional": {
+                "hashbidx": ("HASHBIDX_AUTH",),
+                "source_task_id": ("STRING", {"default": "", "placeholder": "connect task_id from a HashBidX Video box", "tooltip": "Connect the task_id output of a HashBidX Video node (or of another Extend / Edit node), or paste a task id."}),
+                "source_video_url": ("STRING", {"default": "", "placeholder": "or a public https link to the source clip"}),
+                "references": ("HASHBIDX_REFS", {"tooltip": "Optional pictures the prompt refers to, e.g. the new label or product for an edit."}),
+                "camera": ("HASHBIDX_CAMERA",),
+                "max_wait_seconds": ("INT", {"default": 1200, "min": 60, "max": 7200}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF, "tooltip": "Changing it forces a new run; not sent to the API."}),
+            },
+        }
+
+    RETURN_TYPES = ("VIDEO", "IMAGE", "STRING", "STRING", "VIDEO")
+    RETURN_NAMES = ("video", "last_frame", "file_path", "task_id", "new_part")
+    FUNCTION = "generate"
+    CATEGORY = "HashBidX"
+    OUTPUT_NODE = True
+
+    def generate(self, mode, prompt, model, duration, resolution, ratio, audio="model default", join_with_source=True,
+                 hashbidx=None, source_task_id=None, source_video_url="", references=None, camera=None,
+                 max_wait_seconds=1200, seed=0):
+        if not prompt.strip():
+            raise HashBidXError("prompt is required: say what happens next (extend) or what to change (edit).")
+        key, base = _auth(hashbidx)
+        client = Client(key, base)
+        source_task_id = (source_task_id or "").strip()
+        url = (source_video_url or "").strip()
+        info = {}
+        if source_task_id:
+            url, info = client.video_link(source_task_id)
+        elif not url:
+            raise HashBidXError("No source clip. Connect the task_id output of a HashBidX Video node to source_task_id, "
+                                "or put a public https link into source_video_url.")
+        elif not (url.startswith("http://") or url.startswith("https://")):
+            raise HashBidXError("source_video_url must be a public http(s) link. A clip on your computer needs a link "
+                                "first; a clip made by a HashBidX Video node can be connected through task_id instead.")
+        meta = info.get("metadata") if isinstance(info.get("metadata"), dict) else {}
+        if resolution == "same as source":
+            resolution = meta.get("resolution") if meta.get("resolution") in ("480p", "720p", "1080p") else "default"
+        if ratio == "same as source":
+            ratio = meta.get("ratio") if meta.get("ratio") in RATIOS else "16:9"
+        if mode == EXTEND:
+            text = ("Extend the reference video (Video 1). Continue directly from its last frame with the same subjects, "
+                    "setting and style. What happens next: %s" % prompt.strip())
+        else:
+            text = ("Edit the reference video (Video 1). The change: %s. Keep everything else exactly as it is: "
+                    "the other subjects, the setting, the camera and the motion." % prompt.strip().rstrip("."))
+        if camera:
+            text = apply_camera(text, **camera)
+        refs = references or {}
+        body = build_body(model, text, duration, resolution, ratio, None, None, refs.get("images", []), None, audio,
+                          [url] + list(refs.get("videos", [])), refs.get("audios", []))
+        path, task_id = _run_video(client, model, body, max_wait_seconds)
+        new_part = path
+        if mode == EXTEND and join_with_source:
+            try:
+                src = _JOINED.get(source_task_id) if source_task_id else None
+                if not src or not os.path.exists(src):
+                    data = client.download_video(source_task_id) if source_task_id else download_url(url)
+                    src = _save(data, "source", source_task_id or "link")
+                joined = os.path.splitext(path)[0] + "_joined.mp4"
+                _join([src, path], joined)
+                _JOINED[task_id] = joined
+                path = joined
+            except Exception as e:
+                # the new part is paid for and saved; never lose it because joining failed
+                print("[HashBidX] could not join the source clip and the new part (%s). The new part is at %s" % (e, path))
+        return {"ui": {"text": [path]}, "result": (_to_video(path), _last_frame(path), path, task_id, _to_video(new_part))}
+
+
+IMAGE_MODELS = ["qwen-image-3.0", "qwen-image-3.0-pro"]
+IMAGE_SIZES = {"16:9": "1280x720", "9:16": "720x1280", "1:1": "1024x1024", "4:3": "1152x864", "3:4": "864x1152"}
+
+
+class HashBidXImage:
+    """Makes pictures with the same HashBidX key: a first frame, storyboard frames, a character or product sheet.
+    With a reference picture connected, it changes or restyles that picture as the prompt says."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "model": (IMAGE_MODELS, {"default": "qwen-image-3.0"}),
+                "prompt": ("STRING", {"multiline": True, "default": ""}),
+                "ratio": (list(IMAGE_SIZES.keys()), {"default": "16:9"}),
+                "count": ("INT", {"default": 1, "min": 1, "max": 4, "tooltip": "How many pictures to make in this run (each one is charged)."}),
+            },
+            "optional": {
+                "hashbidx": ("HASHBIDX_AUTH",),
+                "reference_image": ("IMAGE", {"tooltip": "Optional: one picture to change or restyle as the prompt says."}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF, "tooltip": "Changing it forces a new run; not sent to the API."}),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE", "STRING")
+    RETURN_NAMES = ("images", "file_paths")
+    FUNCTION = "generate"
+    CATEGORY = "HashBidX"
+
+    def generate(self, model, prompt, ratio, count=1, hashbidx=None, reference_image=None, seed=0):
+        import base64
+        import io
+
+        import numpy as np
+        import torch
+        from PIL import Image
+
+        if not prompt.strip():
+            raise HashBidXError("prompt is required.")
+        key, base = _auth(hashbidx)
+        body = {"model": model, "prompt": prompt.strip(), "size": IMAGE_SIZES[ratio], "n": int(count), "response_format": "b64_json"}
+        if reference_image is not None:
+            body["image"] = image_tensor_to_data_uri(reference_image)
+        out = Client(key, base).create_image(body)
+        items = out.get("data") or []
+        if not items:
+            raise HashBidXError("The API returned no picture: %s" % json.dumps(out)[:400])
+        try:
+            import folder_paths
+            out_dir = os.path.join(folder_paths.get_output_directory(), "hashbidx")
+        except Exception:
+            out_dir = os.path.join(os.getcwd(), "output", "hashbidx")
+        os.makedirs(out_dir, exist_ok=True)
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        tensors, paths, size = [], [], None
+        for i, item in enumerate(items):
+            raw = base64.b64decode(item["b64_json"]) if item.get("b64_json") else download_url(item.get("url") or "")
+            img = Image.open(io.BytesIO(raw)).convert("RGB")
+            path = os.path.join(out_dir, "%s_%s_%d.png" % (stamp, model, i + 1))
+            img.save(path)
+            paths.append(path)
+            if size is None:
+                size = img.size
+            elif img.size != size:
+                img = img.resize(size)
+            tensors.append(torch.from_numpy(np.asarray(img).astype("float32") / 255.0))
+        return (torch.stack(tensors), "\n".join(paths))
+
+
+TEXT_MODELS = ["deepseek-v4.1-flash-1017-global", "qwen3.8-flash-global", "glm-5.3-global", "kimi-k3-global", "qwen3.8-max-global"]
+SHOT_LIST, IMPROVE = "shot list (several shots in one clip)", "improve one prompt"
+_SHOT_SYSTEM = (
+    "You are a film director's assistant writing for an AI video model. Turn the user's idea into a shot list. "
+    "Reply with JSON only, no other text: {\"style\": string, \"shots\": [{\"seconds\": integer, \"description\": string}]}. "
+    "\"style\" is one sentence on the overall look, the characters and the setting, so every shot stays consistent. "
+    "Use exactly the number of shots asked for, and the seconds must add up to exactly the total asked for. "
+    "Each description is one or two sentences: who or what, the action, the camera (shot size and movement) and the light. "
+    "Describe only what can be seen and heard. Write in the language of the user's idea."
+)
+_IMPROVE_SYSTEM = (
+    "You are a film director's assistant writing for an AI video model. Rewrite the user's short idea as one clear, "
+    "detailed prompt of 60 to 120 words for a clip of the stated length: the subject, the action in order, the setting, "
+    "the camera (shot size and movement), the light and the mood. Describe only what can be seen and heard. "
+    "Reply with the prompt only, no title and no quotes. Write in the language of the user's idea."
+)
+
+
+def _parse_shots(text, total, n_shots):
+    t = text.strip()
+    if "```" in t:
+        t = t.split("```")[1]
+        if t.lstrip().lower().startswith("json"):
+            t = t.lstrip()[4:]
+    a, b = t.find("{"), t.rfind("}")
+    if a < 0 or b <= a:
+        raise ValueError("no JSON in the reply")
+    data = json.loads(t[a:b + 1])
+    shots = [(max(1, int(round(float(x.get("seconds", 0) or 0)))), str(x.get("description", "")).strip())
+             for x in data.get("shots", []) if str(x.get("description", "")).strip()]
+    if not shots:
+        raise ValueError("no shots in the reply")
+    # make the seconds add up to the requested total
+    diff = total - sum(s for s, _ in shots)
+    i = 0
+    while diff != 0 and i < 200:
+        k = i % len(shots)
+        if diff > 0:
+            shots[k] = (shots[k][0] + 1, shots[k][1])
+            diff -= 1
+        elif shots[k][0] > 1:
+            shots[k] = (shots[k][0] - 1, shots[k][1])
+            diff += 1
+        i += 1
+    return str(data.get("style", "")).strip(), shots
+
+
+class HashBidXShotWriter:
+    """Turns a short idea into a ready prompt with a HashBidX text model: either a shot list with seconds
+    (several shots in one clip) or one improved, detailed prompt. Connect `prompt` to a Video node's prompt
+    and `total_seconds` to its duration."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "idea": ("STRING", {"multiline": True, "default": "", "placeholder": "Your idea in a sentence or two, e.g. a 15 second ad for a water bottle on a snowy mountain hike"}),
+                "mode": ([SHOT_LIST, IMPROVE], {"default": SHOT_LIST}),
+                "total_seconds": ("INT", {"default": 15, "min": 2, "max": 30}),
+                "shots": ("INT", {"default": 3, "min": 1, "max": 6, "tooltip": "Number of shots (shot list mode)."}),
+                "model": (TEXT_MODELS, {"default": TEXT_MODELS[0]}),
+            },
+            "optional": {
+                "hashbidx": ("HASHBIDX_AUTH",),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFF, "tooltip": "Changing it writes a new version; not sent to the API."}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING", "INT")
+    RETURN_NAMES = ("prompt", "total_seconds")
+    FUNCTION = "write"
+    CATEGORY = "HashBidX"
+
+    def write(self, idea, mode, total_seconds, shots, model, hashbidx=None, seed=0):
+        if not idea.strip():
+            raise HashBidXError("idea is required: describe the clip in a sentence or two.")
+        key, base = _auth(hashbidx)
+        client = Client(key, base)
+        if mode == SHOT_LIST:
+            n = max(1, min(int(shots), int(total_seconds)))
+            user = "Idea: %s\nTotal length: %d seconds. Number of shots: %d." % (idea.strip(), total_seconds, n)
+            system = _SHOT_SYSTEM
+        else:
+            user = "Idea: %s\nClip length: %d seconds." % (idea.strip(), total_seconds)
+            system = _IMPROVE_SYSTEM
+        last = None
+        for _ in range(2):  # one retry if the reply cannot be read
+            out = client.chat({"model": model, "stream": False, "temperature": 0.7, "max_tokens": 2000,
+                               "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]})
+            try:
+                reply = (out["choices"][0]["message"].get("content") or "").strip()
+            except Exception:
+                reply = ""
+            if not reply:
+                last = "empty reply"
+                continue
+            if mode == IMPROVE:
+                return {"ui": {"text": [reply]}, "result": (reply.strip('"'), int(total_seconds))}
+            try:
+                style, items = _parse_shots(reply, int(total_seconds), n)
+            except Exception as e:
+                last = str(e)
+                continue
+            lines, t = ([style] if style else []), 0
+            for i, (secs, text) in enumerate(items):
+                lines.append("Shot %d (%d-%d seconds): %s" % (i + 1, t, t + secs, text))
+                t += secs
+            prompt = "\n".join(lines)
+            return {"ui": {"text": [prompt]}, "result": (prompt, t)}
+        raise HashBidXError("The text model did not return a usable answer (%s). Press Run again or pick another model." % last)
+
+
+def _join(paths, out_path):
+    """Join clips end to end into one MP4 (H.264 + AAC), using the PyAV library that ships with ComfyUI."""
+    from fractions import Fraction
+
+    import av
+    import numpy as np
+
+    RATE = 44100
+    with av.open(paths[0]) as c:
+        v = c.streams.video[0]
+        width, height = v.codec_context.width, v.codec_context.height
+        fps = v.average_rate or Fraction(24, 1)
+    has_audio = []
+    for p in paths:
+        with av.open(p) as c:
+            has_audio.append(len(c.streams.audio) > 0)
+    with av.open(out_path, "w") as out:
+        ov = out.add_stream("libx264", rate=fps)
+        ov.width, ov.height, ov.pix_fmt = width, height, "yuv420p"
+        ov.options = {"crf": "16", "preset": "medium"}
+        oa = None
+        if any(has_audio):
+            oa = out.add_stream("aac", rate=RATE)
+            oa.layout = "stereo"
+        n_frames, n_samples = 0, 0
+        for p, audio in zip(paths, has_audio):
+            count = 0
+            with av.open(p) as c:
+                for frame in c.decode(video=0):
+                    frame = frame.reformat(width=width, height=height, format="yuv420p")
+                    frame.pts = n_frames
+                    frame.time_base = Fraction(fps.denominator, fps.numerator)
+                    frame.pict_type = 0  # let the encoder choose
+                    for packet in ov.encode(frame):
+                        out.mux(packet)
+                    n_frames += 1
+                    count += 1
+            if oa is None:
+                continue
+            want = int(round(count * RATE / float(fps)))  # samples that match this clip's picture length
+            chunks = []
+            if audio:
+                resampler = av.AudioResampler(format="fltp", layout="stereo", rate=RATE)
+                with av.open(p) as c:
+                    for frame in c.decode(audio=0):
+                        frame.pts = None
+                        for r in resampler.resample(frame):
+                            chunks.append(r.to_ndarray())
+                    for r in resampler.resample(None):
+                        chunks.append(r.to_ndarray())
+            sound = np.concatenate(chunks, axis=1) if chunks else np.zeros((2, 0), dtype="float32")
+            if sound.shape[1] < want:
+                sound = np.concatenate([sound, np.zeros((2, want - sound.shape[1]), dtype="float32")], axis=1)
+            sound = np.ascontiguousarray(sound[:, :want].astype("float32"))
+            for i in range(0, want, 1024):
+                af = av.AudioFrame.from_ndarray(np.ascontiguousarray(sound[:, i:i + 1024]), format="fltp", layout="stereo")
+                af.sample_rate = RATE
+                af.pts = n_samples + i
+                af.time_base = Fraction(1, RATE)
+                for packet in oa.encode(af):
+                    out.mux(packet)
+            n_samples += want
+        for packet in ov.encode(None):
+            out.mux(packet)
+        if oa is not None:
+            for packet in oa.encode(None):
+                out.mux(packet)
+    return out_path
+
+
 NODE_CLASS_MAPPINGS = {
     "HashBidXAPIKey": HashBidXAPIKey,
     "HashBidXVideo": HashBidXVideo,
     "HashBidXCamera": HashBidXCamera,
     "HashBidXMultiShot": HashBidXMultiShot,
     "HashBidXReferencePack": HashBidXReferencePack,
+    "HashBidXExtendEdit": HashBidXExtendEdit,
+    "HashBidXImage": HashBidXImage,
+    "HashBidXShotWriter": HashBidXShotWriter,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "HashBidXAPIKey": "HashBidX API Key",
@@ -463,4 +833,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "HashBidXCamera": "HashBidX Camera & Lens",
     "HashBidXMultiShot": "HashBidX Multi-Shot Prompt",
     "HashBidXReferencePack": "HashBidX Reference Pack",
+    "HashBidXExtendEdit": "HashBidX Extend / Edit Clip",
+    "HashBidXImage": "HashBidX Image",
+    "HashBidXShotWriter": "HashBidX Shot Writer (idea to shots)",
 }

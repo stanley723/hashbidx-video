@@ -443,7 +443,7 @@
    "type": "HashBidXCamera",
    "pos": [
     550,
-    654
+    790
    ],
    "size": [
     283,
@@ -538,7 +538,7 @@
    "type": "HashBidXVideo",
    "pos": [
     893,
-    654
+    790
    ],
    "size": [
     430,
@@ -817,7 +817,7 @@
    "type": "SaveVideo",
    "pos": [
     1383,
-    654
+    790
    ],
    "size": [
     420,

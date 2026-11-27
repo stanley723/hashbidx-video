@@ -8,4 +8,19 @@ try:
 except Exception as e:
     print("[HashBidX] typed keys are not hidden from saved files on this ComfyUI: %s" % e)
 
+# Template "3 Image to video" opens with a sample still, so it runs before you pick your own picture.
+try:
+    import os
+    import shutil
+
+    import folder_paths
+
+    _src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "hashbidx_example_still.jpg")
+    _dst = os.path.join(folder_paths.get_input_directory(), "hashbidx_example_still.jpg")
+    if os.path.exists(_src) and not os.path.exists(_dst):
+        os.makedirs(os.path.dirname(_dst), exist_ok=True)
+        shutil.copyfile(_src, _dst)
+except Exception as e:
+    print("[HashBidX] could not place the sample still in ComfyUI's input folder: %s" % e)
+
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

@@ -6,7 +6,8 @@ Use your own HashBidX API key inside ComfyUI to generate video with Seedance 2.5
 No Comfy credits are used: generation is billed to your HashBidX account.
 
 ## Install
-- **In ComfyUI:** click the **Extensions** button (top right) to open the Nodes Manager, search **HashBidX**, click **Install**, then **Apply Changes** to restart ComfyUI. Or run `comfy node install hashbidx-video`.
+- **In ComfyUI:** click the **Extensions** button (top right, next to **Run**) to open the Nodes Manager, search **HashBidX**, click **Install**, then **Apply Changes** to restart ComfyUI. Or run `comfy node install hashbidx-video`.
+- **Comfy Desktop:** on the first screen click the **ComfyUI** card (the one on your computer), not **Comfy Cloud**. Plug-ins like this one cannot be installed in Comfy Cloud.
 - **Manual:** copy this folder into `ComfyUI/custom_nodes/` and restart ComfyUI.
 
 No extra Python packages are needed.
@@ -14,7 +15,7 @@ No extra Python packages are needed.
 ## Add your key (once)
 1. Get a key on the **API Keys** page at https://hashbidx.ai.
 2. In ComfyUI open **Templates**, choose **hashbidx-video** at the bottom of the list, and open **1 Save your HashBidX key**.
-3. Paste the key into **api_key**, leave **save_key** on, and press **Run**. Nothing is generated or charged.
+3. Paste the key into **api_key**, leave **save_key** on, and press **Run**. Nothing is generated or charged. If you press Run with the field empty, the box simply tells you to paste your key.
 4. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
 
 A key typed into the **HashBidX API Key** node is never written into the videos and images ComfyUI saves, or into its run history. It is only kept in a workflow file if you save the workflow while the field is filled, so clear the field once the key is saved.
@@ -26,7 +27,7 @@ Open **Templates > hashbidx-video** and pick one:
 |---|---|
 | **1 Save your HashBidX key** | Saves your key on this computer. Run it once. |
 | **2 Text to video** | A prompt in, a clip out. |
-| **3 Image to video** | Pick a still in **Load Image**, describe the motion, press **Run**. |
+| **3 Image to video** | Opens with a sample still so it runs right away. Pick your own picture in **Load Image**, describe the motion, press **Run**. |
 | **4 Two-shot chain with camera presets** | A timed two-shot prompt with camera presets, then a second clip that continues from the first clip's last frame. |
 
 The finished clip plays in the **Save Video** node and is saved to `ComfyUI/output/hashbidx/`. The same files are in this plug-in's `example_workflows` folder if you prefer to drag them onto the canvas.

@@ -184,8 +184,14 @@ class HashBidXAPIKey:
             if api_key not in _TYPED_KEYS:
                 raise HashBidXError("Please paste your HashBidX key into the api_key field again, or leave it empty to use the saved key.")
             api_key = _TYPED_KEYS[api_key]
-        key, base = resolve_credentials(api_key, base_url)
         typed = bool((api_key or "").strip())
+        try:
+            key, base = resolve_credentials(api_key, base_url)
+        except HashBidXError:
+            # Nothing typed and nothing saved yet: say what to do in the status box instead of failing the run.
+            # A video node connected to this output still stops with the full "no key yet" message.
+            return ({"api_key": "", "base_url": (base_url or "").strip()},
+                    "No key yet. Paste your HashBidX key (it starts with sk-hb-) into the api_key field and press Run again.")
         status = "Using the key typed in this node." if typed else "Using the key saved on this computer."
         if save_key and typed:
             path = user_config_path()
@@ -243,7 +249,7 @@ class HashBidXVideo:
                  max_wait_seconds=1200, seed=0):
         if not prompt.strip():
             raise HashBidXError("prompt is required.")
-        if hashbidx:
+        if hashbidx and hashbidx.get("api_key"):
             key, base = hashbidx["api_key"], hashbidx["base_url"]
         else:
             key, base = resolve_credentials()

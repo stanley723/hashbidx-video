@@ -337,11 +337,11 @@
     "Node name for S&R": "LoadImage"
    },
    "widgets_values": [
-    "example.png",
+    "hashbidx_example_still.jpg",
     "image"
    ],
    "widgets_values_named": {
-    "image": "example.png",
+    "image": "hashbidx_example_still.jpg",
     "upload": "image"
    }
   },

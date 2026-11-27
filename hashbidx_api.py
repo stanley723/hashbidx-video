@@ -8,6 +8,7 @@ API shape (OpenAI videos style):
 import base64
 import io
 import json
+import re
 import os
 import time
 import urllib.error
@@ -15,7 +16,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.5.0"
+USER_AGENT = "ComfyUI-HashBidX/0.5.1"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -56,6 +57,34 @@ def resolve_credentials(api_key="", base_url=""):
     return key, base.rstrip("/")
 
 
+def _check_hint(msg):
+    """The model checks every finished clip and its sound, and words every refusal as a copyright matter."""
+    low = msg.lower()
+    if "copyright" not in low and "sensitive" not in low and "content_policy" not in low:
+        return ""
+    if "audio" in low:
+        return ("\nWhat this means: the model's own check refused the sound it generated for this clip. Nothing was "
+                "charged. Run it again, or set audio to off.")
+    return ("\nWhat this means: the model's own content check refused this clip. Nothing was charged. Run it again or "
+            "change the prompt.")
+
+
+def _spec_hint(msg):
+    """The API names what a model offers when a setting does not fit it. Say that in plain words."""
+    if "unsupported_video_spec" not in msg:
+        return None
+    m = re.search(r"model '([^']+)' supports (.*?); got (.*)$", msg, re.S)
+    if not m:
+        return None
+    got = m.group(3).strip()
+    for raw, plain in (("metadata.generate_audio=false", "audio off"), ("metadata.generate_audio=true", "audio on"),
+                       ("metadata.resolution=", "resolution "), ("metadata.ratio=", "ratio "), ("metadata.", "")):
+        got = got.replace(raw, plain)
+    got = re.sub(r"^seconds=(\d+)$", r"\1 seconds", got)
+    return ("%s does not offer this setting: %s. It offers %s. Change the setting or pick another model. "
+            "Nothing was charged." % (m.group(1), got, m.group(2).strip()))
+
+
 class Client:
     def __init__(self, api_key, base_url=DEFAULT_BASE_URL, timeout=120):
         self.key = api_key
@@ -85,6 +114,9 @@ class Client:
                     msg = "%s: %s" % (err.get("code") or err.get("type") or e.code, err.get("message") or text)
             except Exception:
                 pass
+            spec = _spec_hint(msg)
+            if spec:
+                raise HashBidXError(spec) from None
             raise HashBidXError("HashBidX API %s %s -> HTTP %s %s" % (method, path, e.code, msg)) from None
         except urllib.error.URLError as e:
             raise HashBidXError("Cannot reach HashBidX API at %s: %s" % (url, e.reason)) from None
@@ -136,7 +168,7 @@ class Client:
                 err = info.get("error")
                 if isinstance(err, dict):
                     err = err.get("message") or json.dumps(err)
-                raise HashBidXError("Video task %s failed: %s" % (task_id, err or status))
+                raise HashBidXError("Video task %s failed: %s%s" % (task_id, err or status, _check_hint(str(err or ""))))
             if time.monotonic() > deadline:
                 raise HashBidXError(
                     "Video task %s still '%s' after %ss. It may still finish; the task id is %s."

@@ -28,4 +28,7 @@ try:
 except Exception as e:
     print("[HashBidX] could not place the sample stills in ComfyUI's input folder: %s" % e)
 
-__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
+# Front-end helpers: model-linked options and the key shown as dots (web/hashbidx.js).
+WEB_DIRECTORY = "./web"
+
+__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

@@ -1,5 +1,5 @@
 {
-  "id": "3da1c38b-0de2-43e0-8249-069726c5e005",
+  "id": "e18eebbe-764c-4ba9-ad67-7f7855503251",
   "revision": 0,
   "last_node_id": 4,
   "last_link_id": 2,
@@ -9,10 +9,10 @@
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -60,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        472
       ],
       "size": [
-        400,
-        280
+        380,
+        172
       ],
       "flags": {},
       "order": 1,
@@ -73,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Text to video**\n\n1. Pick a **model** and write your **prompt**.\n2. Set **duration** and **resolution**. The lists only offer what the chosen model has.\n3. Press **Run**. The clip plays in **Save Video** in about 2 to 5 minutes and is saved to ComfyUI's `output` folder.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**Text to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Make the video**: pick a **model**, write your **prompt**, set **duration** and **resolution**. The lists only offer what the chosen model has.\n3. **Result**: press **Run**. The clip plays here in about 2 to 5 minutes and is saved to ComfyUI's `output` folder."
       ],
       "widgets_values_named": {
-        "text": "**Text to video**\n\n1. Pick a **model** and write your **prompt**.\n2. Set **duration** and **resolution**. The lists only offer what the chosen model has.\n3. Press **Run**. The clip plays in **Save Video** in about 2 to 5 minutes and is saved to ComfyUI's `output` folder.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**Text to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Make the video**: pick a **model**, write your **prompt**, set **duration** and **resolution**. The lists only offer what the chosen model has.\n3. **Result**: press **Run**. The clip plays here in about 2 to 5 minutes and is saved to ComfyUI's `output` folder."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -85,11 +85,11 @@
       "id": 3,
       "type": "HashBidXVideo",
       "pos": [
-        550,
-        150
+        570,
+        220
       ],
       "size": [
-        430,
+        400,
         434
       ],
       "flags": {},
@@ -283,11 +283,11 @@
       "id": 4,
       "type": "SaveVideo",
       "pos": [
-        1040,
-        150
+        1070,
+        220
       ],
       "size": [
-        560,
+        520,
         420
       ],
       "flags": {},
@@ -379,14 +379,51 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  Make the video",
+      "bounding": [
+        550,
+        146,
+        440,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  Result",
+      "bounding": [
+        1050,
+        146,
+        560,
+        514
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.89,
+      "scale": 0.87,
       "offset": [
-        -2,
-        -8
+        15,
+        -31
       ]
     }
   },

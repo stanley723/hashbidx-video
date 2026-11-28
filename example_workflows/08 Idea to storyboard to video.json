@@ -1,18 +1,18 @@
 {
-  "id": "56495446-000a-4709-9ba0-ee9351f3ed6d",
+  "id": "319f84bf-e7b5-4ec0-9cfa-e28c5c914570",
   "revision": 0,
   "last_node_id": 6,
-  "last_link_id": 6,
+  "last_link_id": 5,
   "nodes": [
     {
       "id": 1,
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -35,8 +35,7 @@
           "name": "hashbidx",
           "type": "HASHBIDX_AUTH",
           "links": [
-            1,
-            2
+            1
           ]
         },
         {
@@ -61,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        472
       ],
       "size": [
-        400,
-        330
+        380,
+        276
       ],
       "flags": {},
       "order": 1,
@@ -74,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Idea to storyboard to video**\n\n1. Type your idea into **Shot Writer**, and set the length and the number of shots.\n2. Press **Run**. A HashBidX text model writes the shot list (shown in the box below it), and the video model films it as one clip.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**Idea to storyboard to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Your idea**: type your idea into **Shot Writer** and set the length and the number of shots. A HashBidX text model writes the shot list.\n3. **The shot list**: the text that was written shows here.\n4. **Make the video**: films the shot list as one clip. The prompt and the duration come in over the two lines.\n5. **Result**: press **Run**. The clip plays here.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run.\n\nThe key box is wired to the first HashBidX box. The other HashBidX boxes use the same saved key."
       ],
       "widgets_values_named": {
-        "text": "**Idea to storyboard to video**\n\n1. Type your idea into **Shot Writer**, and set the length and the number of shots.\n2. Press **Run**. A HashBidX text model writes the shot list (shown in the box below it), and the video model films it as one clip.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**Idea to storyboard to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Your idea**: type your idea into **Shot Writer** and set the length and the number of shots. A HashBidX text model writes the shot list.\n3. **The shot list**: the text that was written shows here.\n4. **Make the video**: films the shot list as one clip. The prompt and the duration come in over the two lines.\n5. **Result**: press **Run**. The clip plays here.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run.\n\nThe key box is wired to the first HashBidX box. The other HashBidX boxes use the same saved key."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -86,8 +85,8 @@
       "id": 3,
       "type": "HashBidXShotWriter",
       "pos": [
-        550,
-        150
+        570,
+        220
       ],
       "size": [
         400,
@@ -166,8 +165,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            3,
-            5
+            2,
+            3
           ]
         },
         {
@@ -205,12 +204,12 @@
       "id": 4,
       "type": "PreviewAny",
       "pos": [
-        550,
-        490
+        1070,
+        220
       ],
       "size": [
-        400,
-        300
+        430,
+        346
       ],
       "flags": {},
       "order": 3,
@@ -220,7 +219,7 @@
           "localized_name": "source",
           "name": "source",
           "type": "*",
-          "link": 5
+          "link": 2
         }
       ],
       "outputs": [
@@ -241,8 +240,8 @@
       "id": 5,
       "type": "HashBidXVideo",
       "pos": [
-        1010,
-        150
+        1070,
+        696
       ],
       "size": [
         430,
@@ -257,7 +256,7 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
-          "link": 2
+          "link": null
         },
         {
           "localized_name": "camera",
@@ -385,7 +384,7 @@
           "name": "video",
           "type": "VIDEO",
           "links": [
-            6
+            5
           ]
         },
         {
@@ -439,8 +438,8 @@
       "id": 6,
       "type": "SaveVideo",
       "pos": [
-        1500,
-        150
+        1600,
+        696
       ],
       "size": [
         460,
@@ -454,7 +453,7 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 6
+          "link": 5
         },
         {
           "localized_name": "filename_prefix",
@@ -528,11 +527,11 @@
     ],
     [
       2,
-      1,
+      3,
       0,
-      5,
+      4,
       0,
-      "HASHBIDX_AUTH"
+      "STRING"
     ],
     [
       3,
@@ -552,14 +551,6 @@
     ],
     [
       5,
-      3,
-      0,
-      4,
-      0,
-      "STRING"
-    ],
-    [
-      6,
       5,
       0,
       6,
@@ -567,14 +558,75 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  Your idea",
+      "bounding": [
+        550,
+        146,
+        440,
+        374
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  The shot list",
+      "bounding": [
+        1050,
+        146,
+        470,
+        440
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4  Make the video",
+      "bounding": [
+        1050,
+        622,
+        470,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5  Result",
+      "bounding": [
+        1580,
+        622,
+        500,
+        454
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.72,
+      "scale": 0.66,
       "offset": [
-        18,
-        19
+        42,
+        6
       ]
     }
   },

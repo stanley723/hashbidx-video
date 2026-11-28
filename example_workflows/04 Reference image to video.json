@@ -1,5 +1,5 @@
 {
-  "id": "24a6646d-2b0b-4873-9c84-0308af5a66d6",
+  "id": "57959438-f5ff-45f1-a07a-662602fa92d4",
   "revision": 0,
   "last_node_id": 6,
   "last_link_id": 4,
@@ -9,10 +9,10 @@
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -60,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        472
       ],
       "size": [
-        400,
-        370
+        380,
+        230
       ],
       "flags": {},
       "order": 1,
@@ -73,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene.\n\n1. **Load Image** holds the reference picture. A sample still is loaded, so you can press **Run** right away.\n2. **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. In the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. Press **Run**.\n\nReferences cannot be combined with a first or last frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene. Follow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Reference picture**: **Load Image** holds the picture (a sample is loaded). **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. **Make the video**: in the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. **Result**: press **Run**. The clip plays here.\n\nReferences cannot be combined with a first or last frame."
       ],
       "widgets_values_named": {
-        "text": "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene.\n\n1. **Load Image** holds the reference picture. A sample still is loaded, so you can press **Run** right away.\n2. **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. In the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. Press **Run**.\n\nReferences cannot be combined with a first or last frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene. Follow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Reference picture**: **Load Image** holds the picture (a sample is loaded). **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. **Make the video**: in the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. **Result**: press **Run**. The clip plays here.\n\nReferences cannot be combined with a first or last frame."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -85,8 +85,8 @@
       "id": 3,
       "type": "LoadImage",
       "pos": [
-        550,
-        150
+        570,
+        330
       ],
       "size": [
         300,
@@ -147,11 +147,11 @@
       "id": 4,
       "type": "HashBidXReferencePack",
       "pos": [
-        910,
-        150
+        930,
+        330
       ],
       "size": [
-        400,
+        360,
         260
       ],
       "flags": {},
@@ -244,11 +244,11 @@
       "id": 5,
       "type": "HashBidXVideo",
       "pos": [
-        1370,
-        150
+        1390,
+        220
       ],
       "size": [
-        430,
+        400,
         434
       ],
       "flags": {},
@@ -442,12 +442,12 @@
       "id": 6,
       "type": "SaveVideo",
       "pos": [
-        1860,
-        150
+        1890,
+        220
       ],
       "size": [
-        460,
-        360
+        390,
+        340
       ],
       "flags": {},
       "order": 5,
@@ -554,14 +554,63 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  Reference picture",
+      "bounding": [
+        550,
+        256,
+        760,
+        424
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  Make the video",
+      "bounding": [
+        1370,
+        146,
+        440,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4  Result",
+      "bounding": [
+        1870,
+        146,
+        430,
+        434
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
       "scale": 0.6,
       "offset": [
-        40,
-        47
+        53,
+        21
       ]
     }
   },

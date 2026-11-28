@@ -36,6 +36,38 @@ try:
 except Exception as e:
     print("[HashBidX] could not place the sample stills in ComfyUI's input folder: %s" % e)
 
+# Updating through the ComfyUI Manager can leave the template files of an older version in place, which shows
+# old and new cards side by side. Remove the retired template files (exact names only) from this plug-in's own folder.
+try:
+    import os
+
+    _retired = (
+        "1 Save your HashBidX key",
+        "2 Text to video",
+        "3 Image to video",
+        "4 Two-shot chain with camera presets",
+        "5 First and last frame",
+        "6 Keep a character or product",
+        "7 Extend a clip",
+        "8 Edit a clip",
+        "9 Idea to shots to video",
+        "10 Picture first, then video",
+        "hashbidx_image_to_video",
+        "hashbidx_text_to_video",
+        "hashbidx_two_shot_chain",
+    )
+    _tpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "example_workflows")
+    for _base in _retired:
+        for _ext in (".json", ".jpg"):
+            _old = os.path.join(_tpl_dir, _base + _ext)
+            if os.path.isfile(_old):
+                try:
+                    os.remove(_old)
+                except OSError as e:
+                    print("[HashBidX] could not remove the retired template %s: %s" % (_base + _ext, e))
+except Exception as e:
+    print("[HashBidX] could not tidy the template folder: %s" % e)
+
 # Front-end helpers: model-linked options, the key shown as dots, the key box's button and status (web/hashbidx.js).
 WEB_DIRECTORY = "./web"
 

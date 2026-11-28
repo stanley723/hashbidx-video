@@ -22,7 +22,7 @@ Template **10 Use it in your own workflow** shows both sides. One limit today: a
 ## Add your key (once)
 1. Get a key on the **API Keys** page at https://hashbidx.ai.
 2. In ComfyUI open **Templates**, choose **hashbidx-video** at the bottom of the list, and open any template, for example **01 Text to video**.
-3. The **HashBidX API Key** box is at the top left of every template, with a line to each box that uses the key. Paste the key into **api_key** (it shows as dots) and click **Verify and save key**.
+3. The **HashBidX API Key** box is frame **1** at the top left of every template, with a line to the first HashBidX box. Paste the key into **api_key** (it shows as dots) and click **Verify and save key**.
 4. The key is checked with HashBidX, saved on this computer and the field is emptied again. The box now shows the last four characters of the saved key, in every template. Nothing is generated or charged by this step.
 
 If you press **Run** with a key in the field instead, the same happens before anything is generated. If the key is missing or HashBidX refuses it, the run stops at this box and tells you what to do; nothing is charged.
@@ -30,7 +30,7 @@ If you press **Run** with a key in the field instead, the same happens before an
 The key lives in `ComfyUI/user/hashbidx/config.json`, survives plug-in updates, and is never written into workflow files, into the videos and images ComfyUI saves, or into its run history. A HashBidX box that is not connected to the key box uses the saved key as well.
 
 ## Quick start
-Open **Templates > hashbidx-video** and pick one. The cards are numbered 01 to 10:
+Open **Templates > hashbidx-video** and pick one. The cards are numbered 01 to 10. Inside every template the boxes sit in numbered frames that run from left to right: frame 1 is the key box, the last frame plays the result, and the note on the left explains each frame by its number.
 
 | Template | What it does |
 |---|---|
@@ -50,7 +50,7 @@ The finished clip plays in the **Save Video** node and is saved to `ComfyUI/outp
 ## Nodes
 | Node | What it does |
 |---|---|
-| **HashBidX API Key** | Paste your key once and click **Verify and save key**: it is checked, saved on this computer and the field is emptied. The box shows the last four characters of the saved key. Connect `hashbidx` to every box that calls the API. |
+| **HashBidX API Key** | Paste your key once and click **Verify and save key**: it is checked, saved on this computer and the field is emptied. The box shows the last four characters of the saved key. Connect `hashbidx` to the first HashBidX box; every other HashBidX box uses the same saved key. |
 | **HashBidX Video (Seedance / H3 / Wan)** | Generates the clip: text-to-video, image-to-video, first + last frame, or references. Outputs the video and its **last frame**. |
 | **HashBidX Camera & Lens** | Dropdowns for shot size, camera move (and a second move that follows it), lens look, depth of field, lighting, genre, era look, colour grade and pacing. Connect `camera` to the Video node. |
 | **HashBidX Multi-Shot Prompt** | Write up to 4 shots with seconds each; it builds one timed prompt for cuts inside a single clip. Connect `prompt` to the Video node's prompt and use `total_seconds` as the duration. |

@@ -1,18 +1,18 @@
 {
-  "id": "58c1a444-9959-4b60-a463-26d4be591a48",
+  "id": "8d05964e-036b-499a-8273-11d7da1d9fe6",
   "revision": 0,
   "last_node_id": 5,
-  "last_link_id": 4,
+  "last_link_id": 3,
   "nodes": [
     {
       "id": 1,
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -35,8 +35,7 @@
           "name": "hashbidx",
           "type": "HASHBIDX_AUTH",
           "links": [
-            1,
-            2
+            1
           ]
         },
         {
@@ -61,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        472
       ],
       "size": [
-        400,
-        340
+        380,
+        252
       ],
       "flags": {},
       "order": 1,
@@ -74,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Extend a video**\n\n1. The first **HashBidX Video** box makes a clip.\n2. **Extend / Edit Clip** continues it: its prompt says what happens next. The line from **task_id** to **source_task_id** tells it which clip to continue.\n3. Press **Run**. The box on the right plays both parts as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**Extend a video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **First clip**: this box makes a clip.\n3. **Extend it**: the prompt here says what happens next. The line from **task_id** to **source_task_id** tells the box which clip to continue.\n4. **Result**: press **Run**. Both parts play here as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip.\n\nThe key box is wired to the first HashBidX box. The other HashBidX boxes use the same saved key."
       ],
       "widgets_values_named": {
-        "text": "**Extend a video**\n\n1. The first **HashBidX Video** box makes a clip.\n2. **Extend / Edit Clip** continues it: its prompt says what happens next. The line from **task_id** to **source_task_id** tells it which clip to continue.\n3. Press **Run**. The box on the right plays both parts as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**Extend a video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **First clip**: this box makes a clip.\n3. **Extend it**: the prompt here says what happens next. The line from **task_id** to **source_task_id** tells the box which clip to continue.\n4. **Result**: press **Run**. Both parts play here as one clip.\n\nTo extend again, add another **Extend / Edit Clip** box and connect it the same way. An extension is charged for the new seconds and for reading the source clip.\n\nThe key box is wired to the first HashBidX box. The other HashBidX boxes use the same saved key."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -86,11 +85,11 @@
       "id": 3,
       "type": "HashBidXVideo",
       "pos": [
-        550,
-        150
+        570,
+        220
       ],
       "size": [
-        430,
+        400,
         434
       ],
       "flags": {},
@@ -248,7 +247,7 @@
           "name": "task_id",
           "type": "STRING",
           "links": [
-            3
+            2
           ]
         }
       ],
@@ -284,8 +283,8 @@
       "id": 4,
       "type": "HashBidXExtendEdit",
       "pos": [
-        1040,
-        150
+        1070,
+        220
       ],
       "size": [
         430,
@@ -300,7 +299,7 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
-          "link": 2
+          "link": null
         },
         {
           "localized_name": "references",
@@ -396,7 +395,7 @@
           "widget": {
             "name": "source_task_id"
           },
-          "link": 3
+          "link": 2
         },
         {
           "localized_name": "source_video_url",
@@ -435,7 +434,7 @@
           "name": "video",
           "type": "VIDEO",
           "links": [
-            4
+            3
           ]
         },
         {
@@ -501,8 +500,8 @@
       "id": 5,
       "type": "SaveVideo",
       "pos": [
-        1530,
-        150
+        1600,
+        220
       ],
       "size": [
         460,
@@ -516,7 +515,7 @@
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 4
+          "link": 3
         },
         {
           "localized_name": "filename_prefix",
@@ -590,14 +589,6 @@
     ],
     [
       2,
-      1,
-      0,
-      4,
-      0,
-      "HASHBIDX_AUTH"
-    ],
-    [
-      3,
       3,
       3,
       4,
@@ -605,7 +596,7 @@
       "STRING"
     ],
     [
-      4,
+      3,
       4,
       0,
       5,
@@ -613,14 +604,63 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  First clip",
+      "bounding": [
+        550,
+        146,
+        440,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  Extend it",
+      "bounding": [
+        1050,
+        146,
+        470,
+        554
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4  Result",
+      "bounding": [
+        1580,
+        146,
+        500,
+        454
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.71,
+      "scale": 0.66,
       "offset": [
-        20,
-        21
+        42,
+        6
       ]
     }
   },

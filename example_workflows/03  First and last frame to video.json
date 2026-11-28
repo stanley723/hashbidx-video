@@ -1,5 +1,5 @@
 {
-  "id": "21756e32-e47f-4f48-8a48-99c99ffe4661",
+  "id": "9bdbc644-a88d-46dc-9861-8d6d811ab2bb",
   "revision": 0,
   "last_node_id": 6,
   "last_link_id": 4,
@@ -9,10 +9,10 @@
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -60,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        472
       ],
       "size": [
-        400,
-        310
+        380,
+        230
       ],
       "flags": {},
       "order": 1,
@@ -73,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**First and last frame to video**\n\n1. The top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n2. To use your own, pick a file in each **Load Image** box.\n3. Press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**First and last frame to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **First and last picture**: the top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n3. **Make the video**: the prompt says what happens between the two pictures.\n4. **Result**: press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame."
       ],
       "widgets_values_named": {
-        "text": "**First and last frame to video**\n\n1. The top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n2. To use your own, pick a file in each **Load Image** box.\n3. Press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**First and last frame to video**\n\nFollow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **First and last picture**: the top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n3. **Make the video**: the prompt says what happens between the two pictures.\n4. **Result**: press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -85,11 +85,11 @@
       "id": 3,
       "type": "LoadImage",
       "pos": [
-        550,
-        150
+        570,
+        330
       ],
       "size": [
-        300,
+        320,
         330
       ],
       "flags": {},
@@ -147,11 +147,11 @@
       "id": 4,
       "type": "LoadImage",
       "pos": [
-        550,
-        530
+        570,
+        720
       ],
       "size": [
-        300,
+        320,
         330
       ],
       "flags": {},
@@ -209,11 +209,11 @@
       "id": 5,
       "type": "HashBidXVideo",
       "pos": [
-        910,
-        150
+        990,
+        220
       ],
       "size": [
-        430,
+        400,
         434
       ],
       "flags": {},
@@ -407,11 +407,11 @@
       "id": 6,
       "type": "SaveVideo",
       "pos": [
-        1400,
-        150
+        1490,
+        220
       ],
       "size": [
-        520,
+        480,
         400
       ],
       "flags": {},
@@ -519,14 +519,63 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  First and last picture",
+      "bounding": [
+        550,
+        256,
+        360,
+        814
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  Make the video",
+      "bounding": [
+        970,
+        146,
+        440,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4  Result",
+      "bounding": [
+        1470,
+        146,
+        520,
+        494
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.73,
+      "scale": 0.69,
       "offset": [
-        17,
-        17
+        37,
+        -1
       ]
     }
   },

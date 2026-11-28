@@ -1,5 +1,5 @@
 {
-  "id": "8db64013-af25-4e96-bc5c-2db4559585d3",
+  "id": "21606f56-8675-4beb-ae93-b1ec254246ca",
   "revision": 0,
   "last_node_id": 9,
   "last_link_id": 9,
@@ -9,10 +9,10 @@
       "type": "HashBidXAPIKey",
       "pos": [
         90,
-        150
+        220
       ],
       "size": [
-        400,
+        380,
         172
       ],
       "flags": {},
@@ -60,11 +60,11 @@
       "type": "MarkdownNote",
       "pos": [
         90,
-        382
+        928
       ],
       "size": [
-        400,
-        400
+        560,
+        208
       ],
       "flags": {},
       "order": 1,
@@ -73,10 +73,10 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Use it in your own workflow**\n\nHashBidX boxes use ComfyUI's standard connections, so they fit between the boxes you already use.\n\n1. **Before:** any box that outputs an IMAGE can feed **first_frame**, **last_frame** or a reference. Here **Upscale Image** crops the picture to 16:9 first. A picture from your own local model connects the same way.\n2. **After:** the **video** output goes into any box that takes a VIDEO. Here the frames are enlarged 1.5 times and put back together with the sound.\n3. Press **Run**.\n\nReplace the boxes before and after with your own.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "**Use it in your own workflow**\n\nHashBidX boxes use ComfyUI's standard connections, so they fit between the boxes you already use. Follow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Before, your own boxes**: any box that outputs an IMAGE can feed **first_frame**, **last_frame** or a reference. Here **Upscale Image** crops the picture to 16:9 first. A picture from your own local model connects the same way.\n3. **HashBidX Video**: makes the clip.\n4. **After, your own boxes**: the **video** output goes into any box that takes a VIDEO. Here the frames are enlarged 1.5 times and put back together with the sound.\n5. **Result**: press **Run**. Replace the boxes before and after with your own."
       ],
       "widgets_values_named": {
-        "text": "**Use it in your own workflow**\n\nHashBidX boxes use ComfyUI's standard connections, so they fit between the boxes you already use.\n\n1. **Before:** any box that outputs an IMAGE can feed **first_frame**, **last_frame** or a reference. Here **Upscale Image** crops the picture to 16:9 first. A picture from your own local model connects the same way.\n2. **After:** the **video** output goes into any box that takes a VIDEO. Here the frames are enlarged 1.5 times and put back together with the sound.\n3. Press **Run**.\n\nReplace the boxes before and after with your own.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+        "text": "**Use it in your own workflow**\n\nHashBidX boxes use ComfyUI's standard connections, so they fit between the boxes you already use. Follow the numbered frames from left to right.\n\n1. **Your key** (first time only): paste your HashBidX key and click **Verify and save key**. The box then shows the last four characters of the saved key.\n2. **Before, your own boxes**: any box that outputs an IMAGE can feed **first_frame**, **last_frame** or a reference. Here **Upscale Image** crops the picture to 16:9 first. A picture from your own local model connects the same way.\n3. **HashBidX Video**: makes the clip.\n4. **After, your own boxes**: the **video** output goes into any box that takes a VIDEO. Here the frames are enlarged 1.5 times and put back together with the sound.\n5. **Result**: press **Run**. Replace the boxes before and after with your own."
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -85,12 +85,12 @@
       "id": 3,
       "type": "LoadImage",
       "pos": [
-        550,
-        150
+        90,
+        522
       ],
       "size": [
-        300,
-        330
+        260,
+        326
       ],
       "flags": {},
       "order": 2,
@@ -147,11 +147,11 @@
       "id": 4,
       "type": "ImageScale",
       "pos": [
-        550,
-        530
+        400,
+        522
       ],
       "size": [
-        300,
+        250,
         170
       ],
       "flags": {},
@@ -231,11 +231,11 @@
       "id": 5,
       "type": "HashBidXVideo",
       "pos": [
-        910,
-        150
+        740,
+        220
       ],
       "size": [
-        430,
+        390,
         434
       ],
       "flags": {},
@@ -429,11 +429,11 @@
       "id": 6,
       "type": "GetVideoComponents",
       "pos": [
-        1400,
-        150
+        1210,
+        390
       ],
       "size": [
-        300,
+        200,
         130
       ],
       "flags": {},
@@ -461,7 +461,7 @@
           "name": "audio",
           "type": "AUDIO",
           "links": [
-            8
+            7
           ]
         },
         {
@@ -469,7 +469,7 @@
           "name": "fps",
           "type": "FLOAT",
           "links": [
-            7
+            8
           ]
         },
         {
@@ -493,12 +493,12 @@
       "id": 7,
       "type": "ImageScaleBy",
       "pos": [
-        1400,
-        330
+        1450,
+        220
       ],
       "size": [
-        300,
-        110
+        220,
+        100
       ],
       "flags": {},
       "order": 6,
@@ -555,12 +555,12 @@
       "id": 8,
       "type": "CreateVideo",
       "pos": [
-        1400,
-        490
+        1710,
+        390
       ],
       "size": [
-        300,
-        200
+        224,
+        190
       ],
       "flags": {},
       "order": 7,
@@ -577,7 +577,7 @@
           "name": "audio",
           "shape": 7,
           "type": "AUDIO",
-          "link": 8
+          "link": 7
         },
         {
           "localized_name": "fps",
@@ -586,7 +586,7 @@
           "widget": {
             "name": "fps"
           },
-          "link": 7
+          "link": 8
         },
         {
           "localized_name": "bit_depth",
@@ -661,12 +661,12 @@
       "id": 9,
       "type": "SaveVideo",
       "pos": [
-        1760,
-        150
+        2034,
+        220
       ],
       "size": [
-        520,
-        400
+        248,
+        330
       ],
       "flags": {},
       "order": 8,
@@ -791,18 +791,18 @@
     [
       7,
       6,
-      2,
-      8,
-      2,
-      "FLOAT"
-    ],
-    [
-      8,
-      6,
       1,
       8,
       1,
       "AUDIO"
+    ],
+    [
+      8,
+      6,
+      2,
+      8,
+      2,
+      "FLOAT"
     ],
     [
       9,
@@ -813,14 +813,75 @@
       "VIDEO"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1  Your key",
+      "bounding": [
+        70,
+        146,
+        420,
+        266
+      ],
+      "color": "#8A8",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2  Before, your own boxes",
+      "bounding": [
+        70,
+        448,
+        600,
+        420
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3  HashBidX Video",
+      "bounding": [
+        720,
+        146,
+        430,
+        528
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4  After, your own boxes",
+      "bounding": [
+        1190,
+        146,
+        764,
+        454
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5  Result",
+      "bounding": [
+        2014,
+        146,
+        288,
+        424
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.61,
+      "scale": 0.6,
       "offset": [
-        38,
-        44
+        53,
+        21
       ]
     }
   },

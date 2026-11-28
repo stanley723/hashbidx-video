@@ -11,16 +11,19 @@ from .hashbidx_api import (Client, HashBidXError, download_url, image_file_to_da
 # Model IDs as listed by GET /v1/models on hashbidx.ai (checked 2026-11-26).
 # Typical limits, for the README only; the API itself validates each model and returns a clear 400.
 MODELS = {
-    "dreamina-seedance-2-5":      {"label": "Seedance 2.5",            "durations": (4, 30), "resolutions": ["720p", "480p", "1080p"]},
-    "dreamina-seedance-2-0":      {"label": "Seedance 2.0",            "durations": (4, 15), "resolutions": ["720p", "480p", "1080p"]},
-    "dreamina-seedance-2-0-fast": {"label": "Seedance 2.0 Fast",       "durations": (4, 15), "resolutions": ["720p", "480p"]},
-    "dreamina-seedance-2-0-mini": {"label": "Seedance 2.0 Mini",       "durations": (4, 15), "resolutions": ["480p", "720p"]},
-    "MiniMax-H3":                 {"label": "MiniMax H3",              "durations": (4, 15), "resolutions": ["768p", "2k"]},
-    "wan3.0-video":               {"label": "Wan 3.0",                 "durations": (2, 30), "resolutions": ["720p", "480p", "1080p"]},
-    "wan3.0-video-prime":         {"label": "Wan 3.0 Prime",           "durations": (2, 30), "resolutions": ["720p", "480p", "1080p"]},
+    "dreamina-seedance-2-5":      {"label": "Seedance 2.5",            "durations": (4, 30), "resolutions": ["720p", "480p", "1080p"], "extend": "video"},
+    "dreamina-seedance-2-0":      {"label": "Seedance 2.0",            "durations": (4, 15), "resolutions": ["720p", "480p", "1080p", "4k"], "extend": "video"},
+    "dreamina-seedance-2-0-fast": {"label": "Seedance 2.0 Fast",       "durations": (4, 15), "resolutions": ["720p", "480p"], "extend": "video"},
+    "dreamina-seedance-2-0-mini": {"label": "Seedance 2.0 Mini",       "durations": (4, 15), "resolutions": ["480p", "720p"], "extend": "video"},
+    "MiniMax-H3":                 {"label": "MiniMax H3",              "durations": (4, 15), "resolutions": ["768p", "2k"], "extend": "video"},
+    "wan3.0-video":               {"label": "Wan 3.0",                 "durations": (2, 30), "resolutions": ["720p", "480p", "1080p"], "extend": "frame"},
+    "wan3.0-video-prime":         {"label": "Wan 3.0 Prime",           "durations": (2, 30), "resolutions": ["720p", "480p", "1080p"], "extend": "frame"},
 }
+# "extend": how a clip is continued on that model (tested 2026-11-27). "video" = the source clip goes in as a
+# reference video and the model films what comes next. "frame" = the model starts from the source clip's last
+# frame (Wan re-films a reference video from its start instead of continuing it).
 MODEL_IDS = list(MODELS.keys())
-ALL_RESOLUTIONS = ["default", "480p", "720p", "768p", "1080p", "2k"]
+ALL_RESOLUTIONS = ["default", "480p", "720p", "768p", "1080p", "2k", "4k"]
 RATIOS = ["auto", "16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "adaptive"]
 
 
@@ -61,8 +64,8 @@ def build_body(model, prompt, duration, resolution, ratio, first_frame_uri=None,
     if ratio == "auto":
         if not has_frames:
             body["metadata"]["ratio"] = "16:9"
-    else:
-        body["metadata"]["ratio"] = ratio
+    elif ratio:
+        body["metadata"]["ratio"] = ratio  # None = not sent, the model keeps the shape of its input
     if resolution != "default":
         body["metadata"]["resolution"] = resolution
     if duration and duration > 0:
@@ -223,7 +226,7 @@ class HashBidXVideo:
                 "model": (MODEL_IDS, {"default": "dreamina-seedance-2-5"}),
                 "prompt": ("STRING", {"multiline": True, "default": ""}),
                 "duration": ("INT", {"default": 5, "min": 0, "max": 30, "step": 1, "tooltip": "Seconds. 0 = model default."}),
-                "resolution": (ALL_RESOLUTIONS, {"default": "720p", "tooltip": "MiniMax H3 uses 768p / 2k. 'default' lets the model choose."}),
+                "resolution": (ALL_RESOLUTIONS, {"default": "720p", "tooltip": "MiniMax H3 uses 768p / 2k. 4k is on Seedance 2.0. 'default' lets the model choose."}),
                 "ratio": (RATIOS, {"default": "auto", "tooltip": "auto = follow the first-frame image, or 16:9 otherwise."}),
                 "audio": (AUDIO_MODES, {"default": "model default", "tooltip": "Generate sound with the video (dialogue, effects, ambience)."}),
             },
@@ -490,9 +493,9 @@ class HashBidXExtendEdit:
             "required": {
                 "mode": ([EXTEND, EDIT], {"default": EXTEND}),
                 "prompt": ("STRING", {"multiline": True, "default": "", "placeholder": "Extend: what happens next.  Edit: what to change."}),
-                "model": (SEEDANCE_IDS, {"default": "dreamina-seedance-2-5"}),
+                "model": (MODEL_IDS, {"default": "dreamina-seedance-2-5"}),
                 "duration": ("INT", {"default": 5, "min": 0, "max": 30, "step": 1, "tooltip": "Seconds of the new part. For an edit, use the length of the source clip. 0 = model default."}),
-                "resolution": (["same as source", "480p", "720p", "1080p"], {"default": "same as source"}),
+                "resolution": (["same as source"] + ALL_RESOLUTIONS[1:], {"default": "same as source"}),
                 "ratio": (["same as source"] + [r for r in RATIOS if r not in ("auto", "adaptive")], {"default": "same as source"}),
                 "audio": (AUDIO_MODES, {"default": "model default"}),
                 "join_with_source": ("BOOLEAN", {"default": True, "tooltip": "Extend only: the video output is the source clip and the new part as one clip."}),
@@ -533,29 +536,74 @@ class HashBidXExtendEdit:
             raise HashBidXError("source_video_url must be a public http(s) link. A clip on your computer needs a link "
                                 "first; a clip made by a HashBidX Video node can be connected through task_id instead.")
         meta = info.get("metadata") if isinstance(info.get("metadata"), dict) else {}
+        offered = MODELS.get(model, {}).get("resolutions", [])
         if resolution == "same as source":
-            resolution = meta.get("resolution") if meta.get("resolution") in ("480p", "720p", "1080p") else "default"
+            src_res = str(meta.get("resolution") or "").lower()
+            resolution = src_res if src_res in offered else "default"
         if ratio == "same as source":
             ratio = meta.get("ratio") if meta.get("ratio") in RATIOS else "16:9"
-        if mode == EXTEND:
-            text = ("Extend the reference video (Video 1). Continue directly from its last frame with the same subjects, "
-                    "setting and style. What happens next: %s" % prompt.strip())
-        else:
-            text = ("Edit the reference video (Video 1). The change: %s. Keep everything else exactly as it is: "
-                    "the other subjects, the setting, the camera and the motion." % prompt.strip().rstrip("."))
-        if camera:
-            text = apply_camera(text, **camera)
         refs = references or {}
-        body = build_body(model, text, duration, resolution, ratio, None, None, refs.get("images", []), None, audio,
-                          [url] + list(refs.get("videos", [])), refs.get("audios", []))
-        path, task_id = _run_video(client, model, body, max_wait_seconds)
+        src = _JOINED.get(source_task_id) if source_task_id else None
+        if src and not os.path.exists(src):
+            src = None
+
+        def source_file():
+            data = client.download_video(source_task_id) if source_task_id else download_url(url)
+            return _save(data, "source", source_task_id or "link")
+
+        if mode == EXTEND and MODELS.get(model, {}).get("extend") == "frame":
+            # Wan: start the new part on the last frame of the source clip
+            if refs.get("images") or refs.get("videos") or refs.get("audios"):
+                raise HashBidXError("On Wan models an extension starts from the last frame of the clip, so a Reference Pack "
+                                    "cannot be added to it. Disconnect the Reference Pack, or pick a Seedance model or MiniMax H3.")
+            src = src or source_file()
+            text = ("Continue this shot from the given first frame, with the same subjects, setting and style. "
+                    "What happens next: %s" % prompt.strip())
+            if camera:
+                text = apply_camera(text, **camera)
+            frame = _last_frame(src)
+            if frame.shape[1] <= 64 and float(frame.max()) == 0.0:
+                raise HashBidXError("Could not read the last frame of the source clip, so it cannot be extended on this "
+                                    "model. Pick a Seedance model or MiniMax H3 for this extension.")
+            body = build_body(model, text, duration, resolution, "auto", image_tensor_to_data_uri(frame), None,
+                              None, None, audio)
+        else:
+            strict = model == "dreamina-seedance-2-5"
+            if mode == EXTEND:
+                text = ("Extend the reference video (Video 1). Continue directly from its last frame with the same subjects, "
+                        "setting and style. What happens next: %s" % prompt.strip())
+                if strict:
+                    ratio = None  # Seedance 2.5 keeps the shape of the source clip and refuses a ratio here (tested 2026-11-27)
+            elif strict:
+                # Seedance 2.5 refuses a length for what it reads as "video editing", and the API always sends one.
+                # Worded as a new take of the same shot, it accepts the request and returns the edited clip.
+                text = ("Video 1 is the reference. Film a new take of the same shot with the same setting, camera and "
+                        "motion as Video 1. Director's note for the new take: %s." % prompt.strip().rstrip("."))
+            else:
+                text = ("Edit the reference video (Video 1). The change: %s. Keep everything else exactly as it is: "
+                        "the other subjects, the setting, the camera and the motion." % prompt.strip().rstrip("."))
+            if camera:
+                text = apply_camera(text, **camera)
+            body = build_body(model, text, duration, resolution, ratio, None, None, refs.get("images", []), None, audio,
+                              [url] + list(refs.get("videos", [])), refs.get("audios", []))
+        try:
+            path, task_id = _run_video(client, model, body, max_wait_seconds)
+        except HashBidXError as e:
+            if "identified your task as video" in str(e):
+                label = MODELS.get(model, {}).get("label", model)
+                if mode == EXTEND:
+                    raise HashBidXError("%s did not accept this extension. Describe what happens next in other words and "
+                                        "run again, or pick another model for this clip (Seedance 2.0 and MiniMax H3 both "
+                                        "do this). Nothing was charged." % label) from None
+                raise HashBidXError("%s did not accept this edit. It takes changing, replacing and adding things; for "
+                                    "taking something out of the clip pick Seedance 2.0 or MiniMax H3. You can also say "
+                                    "what the new take shows (\"the fox is white\") and run again. Nothing was charged."
+                                    % label) from None
+            raise
         new_part = path
         if mode == EXTEND and join_with_source:
             try:
-                src = _JOINED.get(source_task_id) if source_task_id else None
-                if not src or not os.path.exists(src):
-                    data = client.download_video(source_task_id) if source_task_id else download_url(url)
-                    src = _save(data, "source", source_task_id or "link")
+                src = src or source_file()
                 joined = os.path.splitext(path)[0] + "_joined.mp4"
                 _join([src, path], joined)
                 _JOINED[task_id] = joined

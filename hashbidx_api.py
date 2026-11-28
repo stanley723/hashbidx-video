@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.5.2"
+USER_AGENT = "ComfyUI-HashBidX/0.5.3"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -137,6 +137,10 @@ class Client:
             refused = _input_check_hint(msg)
             if refused:
                 raise HashBidXError(refused) from None
+            if method == "POST" and (e.code in (502, 503, 504) or "upstream_unavailable" in msg):
+                raise HashBidXError("This model is temporarily unavailable. It is not about your prompt or your settings, and "
+                                    "nothing was charged. Wait a few minutes and run again, or pick another model for now."
+                                    "\nDetails: HTTP %s %s" % (e.code, msg)) from None
             raise HashBidXError("HashBidX API %s %s -> HTTP %s %s" % (method, path, e.code, msg)) from None
         except urllib.error.URLError as e:
             raise HashBidXError("Cannot reach HashBidX API at %s: %s" % (url, e.reason)) from None

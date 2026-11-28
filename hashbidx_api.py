@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.5.1"
+USER_AGENT = "ComfyUI-HashBidX/0.5.2"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -69,6 +69,23 @@ def _check_hint(msg):
             "change the prompt.")
 
 
+def _input_check_hint(msg):
+    """The model also checks the prompt text and the pictures before it starts. Say that in plain words."""
+    low = msg.lower()
+    if "identified your task as video" in low:
+        return None
+    if "content_policy" not in low and "sensitive" not in low:
+        return None
+    if "input image" in low or "input video" in low:
+        what, fix = "a picture or clip you gave it", "Use another picture or clip"
+    elif "input text" in low or "prompt" in low:
+        what, fix = "the wording of the prompt", "Change the wording"
+    else:
+        what, fix = "what you sent", "Change the prompt or the pictures"
+    return ("The model's own content check refused %s before anything was generated. Nothing was charged. %s or pick "
+            "another model, then run again.\nDetails from the model: %s" % (what, fix, msg))
+
+
 def _spec_hint(msg):
     """The API names what a model offers when a setting does not fit it. Say that in plain words."""
     if "unsupported_video_spec" not in msg:
@@ -117,6 +134,9 @@ class Client:
             spec = _spec_hint(msg)
             if spec:
                 raise HashBidXError(spec) from None
+            refused = _input_check_hint(msg)
+            if refused:
+                raise HashBidXError(refused) from None
             raise HashBidXError("HashBidX API %s %s -> HTTP %s %s" % (method, path, e.code, msg)) from None
         except urllib.error.URLError as e:
             raise HashBidXError("Cannot reach HashBidX API at %s: %s" % (url, e.reason)) from None

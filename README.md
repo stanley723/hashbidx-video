@@ -106,7 +106,7 @@ What each model does (tested with real generations, 27 Nov 2026):
 | Timed multi-shot prompt | yes | yes | yes | yes | yes | yes | yes |
 | Sound | on / off | on / off | on / off | on / off | always on | on / off | on / off |
 | Extend a clip | yes | yes | yes | yes | yes | yes, from the last frame | yes, from the last frame |
-| Edit a clip | yes | yes | yes | yes | yes | yes | yes |
+| Edit a clip | yes (change, replace, add; not remove) | yes | yes | yes | yes | yes | yes |
 
 Pictures: `qwen-image-3.0` and `qwen-image-3.0-pro`, in 16:9, 9:16, 1:1, 4:3 and 3:4.
 

@@ -577,8 +577,8 @@ class HashBidXExtendEdit:
             elif strict:
                 # Seedance 2.5 refuses a length for what it reads as "video editing", and the API always sends one.
                 # Worded as a new take of the same shot, it accepts the request and returns the edited clip.
-                text = ("Video 1 is the reference. Film the same shot again with the same setting, camera and motion as "
-                        "Video 1, with one difference: %s." % prompt.strip().rstrip("."))
+                text = ("Video 1 is the reference. Film a new take of the same shot with the same setting, camera and "
+                        "motion as Video 1. Director's note for the new take: %s." % prompt.strip().rstrip("."))
             else:
                 text = ("Edit the reference video (Video 1). The change: %s. Keep everything else exactly as it is: "
                         "the other subjects, the setting, the camera and the motion." % prompt.strip().rstrip("."))
@@ -590,10 +590,15 @@ class HashBidXExtendEdit:
             path, task_id = _run_video(client, model, body, max_wait_seconds)
         except HashBidXError as e:
             if "identified your task as video" in str(e):
-                raise HashBidXError("%s did not accept this %s. Describe the change in other words and run again, or pick "
-                                    "another model for this clip (Seedance 2.0 and MiniMax H3 both do this). Nothing was "
-                                    "charged." % (MODELS.get(model, {}).get("label", model),
-                                                  "extension" if mode == EXTEND else "edit")) from None
+                label = MODELS.get(model, {}).get("label", model)
+                if mode == EXTEND:
+                    raise HashBidXError("%s did not accept this extension. Describe what happens next in other words and "
+                                        "run again, or pick another model for this clip (Seedance 2.0 and MiniMax H3 both "
+                                        "do this). Nothing was charged." % label) from None
+                raise HashBidXError("%s did not accept this edit. It takes changing, replacing and adding things; for "
+                                    "taking something out of the clip pick Seedance 2.0 or MiniMax H3. You can also say "
+                                    "what the new take shows (\"the fox is white\") and run again. Nothing was charged."
+                                    % label) from None
             raise
         new_part = path
         if mode == EXTEND and join_with_source:

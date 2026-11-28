@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 
 DEFAULT_BASE_URL = "https://hashbidx.ai/v1"
-USER_AGENT = "ComfyUI-HashBidX/0.5.3"
+USER_AGENT = "ComfyUI-HashBidX/0.6.0"
 PLUGIN_CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
@@ -44,17 +44,65 @@ class HashBidXError(RuntimeError):
     pass
 
 
+NO_KEY = ("No HashBidX API key yet. Paste your key (it starts with sk-hb-) into the api_key field of the "
+          "'HashBidX API Key' box, click 'Verify and save key', then press Run again.")
+BAD_KEY = ("HashBidX did not accept this API key. Copy the whole key again from hashbidx.ai > API Keys (it starts "
+           "with sk-hb-), paste it into the 'HashBidX API Key' box and click 'Verify and save key'.")
+
+
 def resolve_credentials(api_key="", base_url=""):
     """Node input wins, then the key saved on this computer (ComfyUI/user/hashbidx/config.json)."""
     cfg = _load_config()
     key = (api_key or "").strip() or str(cfg.get("api_key", "")).strip()
     base = (base_url or "").strip() or str(cfg.get("base_url", "")).strip() or DEFAULT_BASE_URL
     if not key:
-        raise HashBidXError(
-            "No HashBidX API key yet. Open Templates > hashbidx-video > '1 Save your HashBidX key', paste your key and press Run once. "
-            "Or paste the key into a 'HashBidX API Key' node connected to this node."
-        )
+        raise HashBidXError(NO_KEY)
     return key, base.rstrip("/")
+
+
+def saved_key():
+    """The key saved on this computer, or "" when there is none yet."""
+    return str(_load_config().get("api_key", "")).strip()
+
+
+def key_tail(key):
+    """The last four characters, to tell keys apart on screen without showing the key."""
+    key = (key or "").strip()
+    return key[-4:] if len(key) >= 12 else ""
+
+
+def save_key(key):
+    """Write the key to ComfyUI/user/hashbidx/config.json, readable by this user only. Keeps a custom base_url."""
+    path = user_config_path()
+    if not path:
+        raise HashBidXError("Could not find the ComfyUI user folder, so the key was not saved.")
+    cfg = _load_config()
+    out = {"api_key": key.strip()}
+    base = str(cfg.get("base_url", "")).strip()
+    if base and base.rstrip("/") != DEFAULT_BASE_URL:
+        out["base_url"] = base
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        json.dump(out, f)
+    try:
+        os.chmod(path, 0o600)  # also when the file was there before
+    except OSError:
+        pass
+    return path
+
+
+_VERIFIED = {}  # (key, base) -> time of the last successful check in this session
+
+
+def verify_key(key, base, max_age=600):
+    """Ask HashBidX whether it accepts this key (a free call that generates nothing)."""
+    now = time.monotonic()
+    seen = _VERIFIED.get((key, base))
+    if seen is not None and now - seen < max_age:
+        return
+    Client(key, base, timeout=30)._request("GET", "models")
+    _VERIFIED[(key, base)] = now
 
 
 def _check_hint(msg):
@@ -137,6 +185,10 @@ class Client:
             refused = _input_check_hint(msg)
             if refused:
                 raise HashBidXError(refused) from None
+            if e.code == 401 or "invalid_api_key" in msg:
+                _VERIFIED.pop((self.key, self.base), None)
+                free = " Nothing was generated or charged." if (method == "POST" or path == "models") else ""
+                raise HashBidXError(BAD_KEY + free + "\nDetails: HTTP %s %s" % (e.code, msg)) from None
             if method == "POST" and (e.code in (502, 503, 504) or "upstream_unavailable" in msg):
                 raise HashBidXError("This model is temporarily unavailable. It is not about your prompt or your settings, and "
                                     "nothing was charged. Wait a few minutes and run again, or pick another model for now."

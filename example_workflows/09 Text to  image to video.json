@@ -1,172 +1,100 @@
 {
-  "id": "0df9033e-6e0e-4eeb-aa2d-dd7b5888bf5e",
+  "id": "b24f15d5-1a89-4c72-8d59-eede22c2ea3f",
   "revision": 0,
-  "last_node_id": 5,
-  "last_link_id": 3,
+  "last_node_id": 6,
+  "last_link_id": 5,
   "nodes": [
     {
       "id": 1,
-      "type": "MarkdownNote",
+      "type": "HashBidXAPIKey",
       "pos": [
         90,
         150
       ],
       "size": [
         400,
-        250
+        172
       ],
       "flags": {},
       "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "api_key",
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "type": "HASHBIDX_AUTH",
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "status",
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXAPIKey"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "api_key": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        90,
+        382
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**First and last frame**\n\n1. The top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n2. To use your own, click the picture name in each **Load Image** box and pick a file.\n3. Press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame. Only generated video is charged."
+        "**Text to image to video**\n\n1. **HashBidX Image** makes the opening picture from its prompt (shown below it).\n2. **HashBidX Video** uses that picture as the first frame: its prompt describes the motion and the camera.\n3. Press **Run**.\n\nUse the same box to make storyboard frames or a character sheet. Pictures and video are charged per run.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
       ],
       "widgets_values_named": {
-        "text": "**First and last frame**\n\n1. The top **Load Image** is the first picture, the bottom one is the last picture. Sample stills are loaded, so you can press **Run** right away.\n2. To use your own, click the picture name in each **Load Image** box and pick a file.\n3. Press **Run**. The clip starts on the first picture and ends on the last one.\n\nA last frame always needs a first frame. Only generated video is charged."
+        "text": "**Text to image to video**\n\n1. **HashBidX Image** makes the opening picture from its prompt (shown below it).\n2. **HashBidX Video** uses that picture as the first frame: its prompt describes the motion and the camera.\n3. Press **Run**.\n\nUse the same box to make storyboard frames or a character sheet. Pictures and video are charged per run.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
       },
       "color": "#432",
       "bgcolor": "#653"
     },
     {
-      "id": 2,
-      "type": "LoadImage",
-      "pos": [
-        90,
-        450
-      ],
-      "size": [
-        400,
-        330
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "image",
-          "name": "image",
-          "type": "COMBO",
-          "widget": {
-            "name": "image"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "choose file to upload",
-          "name": "upload",
-          "type": "IMAGEUPLOAD",
-          "widget": {
-            "name": "upload"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "IMAGE",
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            1
-          ]
-        },
-        {
-          "localized_name": "MASK",
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "hashbidx_example_still.jpg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "hashbidx_example_still.jpg",
-        "upload": "image"
-      }
-    },
-    {
       "id": 3,
-      "type": "LoadImage",
-      "pos": [
-        90,
-        830
-      ],
-      "size": [
-        400,
-        330
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "image",
-          "name": "image",
-          "type": "COMBO",
-          "widget": {
-            "name": "image"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "choose file to upload",
-          "name": "upload",
-          "type": "IMAGEUPLOAD",
-          "widget": {
-            "name": "upload"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "IMAGE",
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            2
-          ]
-        },
-        {
-          "localized_name": "MASK",
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "hashbidx_example_last.jpg",
-        "image"
-      ],
-      "widgets_values_named": {
-        "image": "hashbidx_example_last.jpg",
-        "upload": "image"
-      }
-    },
-    {
-      "id": 4,
-      "type": "HashBidXVideo",
+      "type": "HashBidXImage",
       "pos": [
         550,
         150
       ],
       "size": [
-        430,
-        434
+        400,
+        240
       ],
       "flags": {},
-      "order": 3,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -174,7 +102,156 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
+          "link": 1
+        },
+        {
+          "localized_name": "reference_image",
+          "name": "reference_image",
+          "shape": 7,
+          "type": "IMAGE",
           "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "count",
+          "name": "count",
+          "type": "INT",
+          "widget": {
+            "name": "count"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            3,
+            4
+          ]
+        },
+        {
+          "localized_name": "file_paths",
+          "name": "file_paths",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXImage"
+      },
+      "widgets_values": [
+        "qwen-image-3.0",
+        "A plain insulated steel water bottle with no logo and no text, standing on a snowy rock at sunrise, mountains behind, product photo.",
+        "16:9",
+        1,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "qwen-image-3.0",
+        "prompt": "A plain insulated steel water bottle with no logo and no text, standing on a snowy rock at sunrise, mountains behind, product photo.",
+        "ratio": "16:9",
+        "count": 1,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 4,
+      "type": "PreviewImage",
+      "pos": [
+        550,
+        450
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 5,
+      "type": "HashBidXVideo",
+      "pos": [
+        1010,
+        150
+      ],
+      "size": [
+        430,
+        434
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": 2
         },
         {
           "localized_name": "camera",
@@ -188,14 +265,14 @@
           "name": "first_frame",
           "shape": 7,
           "type": "IMAGE",
-          "link": 1
+          "link": 4
         },
         {
           "localized_name": "last_frame",
           "name": "last_frame",
           "shape": 7,
           "type": "IMAGE",
-          "link": 2
+          "link": null
         },
         {
           "localized_name": "reference_images",
@@ -302,7 +379,7 @@
           "name": "video",
           "type": "VIDEO",
           "links": [
-            3
+            5
           ]
         },
         {
@@ -328,24 +405,24 @@
         "Node name for S&R": "HashBidXVideo"
       },
       "widgets_values": [
-        "MiniMax-H3",
-        "The fox turns and walks toward the camera through the snow, natural motion.",
+        "dreamina-seedance-2-0-mini",
+        "The camera slowly orbits the bottle while light snow drifts past in the wind.",
         5,
-        "768p",
+        "480p",
         "auto",
-        "model default",
+        "off",
         "",
         1200,
         0,
         "randomize"
       ],
       "widgets_values_named": {
-        "model": "MiniMax-H3",
-        "prompt": "The fox turns and walks toward the camera through the snow, natural motion.",
+        "model": "dreamina-seedance-2-0-mini",
+        "prompt": "The camera slowly orbits the bottle while light snow drifts past in the wind.",
         "duration": 5,
-        "resolution": "768p",
+        "resolution": "480p",
         "ratio": "auto",
-        "audio": "model default",
+        "audio": "off",
         "extra_params_json": "",
         "max_wait_seconds": 1200,
         "seed": 0,
@@ -353,10 +430,10 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "SaveVideo",
       "pos": [
-        1040,
+        1500,
         150
       ],
       "size": [
@@ -364,14 +441,14 @@
         360
       ],
       "flags": {},
-      "order": 4,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 3
+          "link": 5
         },
         {
           "localized_name": "filename_prefix",
@@ -421,13 +498,13 @@
       ],
       "properties": {},
       "widgets_values": [
-        "hashbidx/first_last",
+        "hashbidx/image_first",
         "auto",
         "auto",
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "hashbidx/first_last",
+        "filename_prefix": "hashbidx/image_first",
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
@@ -437,25 +514,41 @@
   "links": [
     [
       1,
-      2,
+      1,
       0,
-      4,
-      2,
-      "IMAGE"
+      3,
+      0,
+      "HASHBIDX_AUTH"
     ],
     [
       2,
-      3,
-      0,
-      4,
-      3,
-      "IMAGE"
-    ],
-    [
-      3,
-      4,
+      1,
       0,
       5,
+      0,
+      "HASHBIDX_AUTH"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      2,
+      "IMAGE"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
       0,
       "VIDEO"
     ]
@@ -464,10 +557,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.85,
+      "scale": 0.72,
       "offset": [
-        0,
-        -60
+        18,
+        19
       ]
     }
   },

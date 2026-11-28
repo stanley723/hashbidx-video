@@ -1,37 +1,89 @@
 {
-  "id": "1e7ba25a-296f-40e6-87d9-c6dfa7bf3325",
+  "id": "3fda5f62-58f8-4539-8118-6279b0e18b17",
   "revision": 0,
-  "last_node_id": 5,
-  "last_link_id": 3,
+  "last_node_id": 6,
+  "last_link_id": 5,
   "nodes": [
     {
       "id": 1,
-      "type": "MarkdownNote",
+      "type": "HashBidXAPIKey",
       "pos": [
         90,
         150
       ],
       "size": [
         400,
-        270
+        172
       ],
       "flags": {},
       "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "api_key",
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "type": "HASHBIDX_AUTH",
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "status",
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXAPIKey"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "api_key": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        90,
+        382
+      ],
+      "size": [
+        400,
+        320
+      ],
+      "flags": {},
+      "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "**Edit a clip**\n\n1. The first **HashBidX Video** box makes a clip (the top player shows it).\n2. **Extend / Edit Clip** is set to **edit**: its prompt says what to change. Everything else in the clip stays.\n3. Press **Run**. The bottom player shows the edited clip.\n\nSet **duration** to the length of the source clip. To change a label or product, connect a **Reference Pack** with the new picture and mention **Image 1** in the prompt. An edit is charged for the new clip and for reading the source clip."
+        "**Edit a video**\n\n1. The first **HashBidX Video** box makes a clip (the top player shows it).\n2. **Extend / Edit Clip** is set to **edit**: its prompt says what to change. Everything else in the clip stays.\n3. Press **Run**. The bottom player shows the edited clip.\n\nSet **duration** to the length of the source clip. An edit is charged for the new clip and for reading the source clip.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
       ],
       "widgets_values_named": {
-        "text": "**Edit a clip**\n\n1. The first **HashBidX Video** box makes a clip (the top player shows it).\n2. **Extend / Edit Clip** is set to **edit**: its prompt says what to change. Everything else in the clip stays.\n3. Press **Run**. The bottom player shows the edited clip.\n\nSet **duration** to the length of the source clip. To change a label or product, connect a **Reference Pack** with the new picture and mention **Image 1** in the prompt. An edit is charged for the new clip and for reading the source clip."
+        "text": "**Edit a video**\n\n1. The first **HashBidX Video** box makes a clip (the top player shows it).\n2. **Extend / Edit Clip** is set to **edit**: its prompt says what to change. Everything else in the clip stays.\n3. Press **Run**. The bottom player shows the edited clip.\n\nSet **duration** to the length of the source clip. An edit is charged for the new clip and for reading the source clip.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
       },
       "color": "#432",
       "bgcolor": "#653"
     },
     {
-      "id": 2,
+      "id": 3,
       "type": "HashBidXVideo",
       "pos": [
         550,
@@ -42,7 +94,7 @@
         434
       ],
       "flags": {},
-      "order": 1,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -50,7 +102,7 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
-          "link": null
+          "link": 1
         },
         {
           "localized_name": "camera",
@@ -178,7 +230,7 @@
           "name": "video",
           "type": "VIDEO",
           "links": [
-            2
+            4
           ]
         },
         {
@@ -198,7 +250,7 @@
           "name": "task_id",
           "type": "STRING",
           "links": [
-            1
+            3
           ]
         }
       ],
@@ -231,18 +283,18 @@
       }
     },
     {
-      "id": 3,
+      "id": 4,
       "type": "HashBidXExtendEdit",
       "pos": [
         550,
-        650
+        660
       ],
       "size": [
         430,
-        444
+        460
       ],
       "flags": {},
-      "order": 2,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -250,7 +302,7 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
-          "link": null
+          "link": 2
         },
         {
           "localized_name": "references",
@@ -346,7 +398,7 @@
           "widget": {
             "name": "source_task_id"
           },
-          "link": 1
+          "link": 3
         },
         {
           "localized_name": "source_video_url",
@@ -385,7 +437,7 @@
           "name": "video",
           "type": "VIDEO",
           "links": [
-            3
+            5
           ]
         },
         {
@@ -448,7 +500,7 @@
       }
     },
     {
-      "id": 4,
+      "id": 5,
       "type": "SaveVideo",
       "pos": [
         1040,
@@ -459,14 +511,14 @@
         360
       ],
       "flags": {},
-      "order": 3,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 2
+          "link": 4
         },
         {
           "localized_name": "filename_prefix",
@@ -529,25 +581,25 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "SaveVideo",
       "pos": [
         1040,
-        650
+        660
       ],
       "size": [
         460,
         360
       ],
       "flags": {},
-      "order": 4,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "video",
           "name": "video",
           "type": "VIDEO",
-          "link": 3
+          "link": 5
         },
         {
           "localized_name": "filename_prefix",
@@ -613,25 +665,41 @@
   "links": [
     [
       1,
+      1,
+      0,
+      3,
+      0,
+      "HASHBIDX_AUTH"
+    ],
+    [
       2,
+      1,
+      0,
+      4,
+      0,
+      "HASHBIDX_AUTH"
+    ],
+    [
       3,
       3,
+      3,
+      4,
       11,
       "STRING"
     ],
     [
-      2,
-      2,
-      0,
       4,
+      3,
+      0,
+      5,
       0,
       "VIDEO"
     ],
     [
-      3,
-      3,
-      0,
       5,
+      4,
+      0,
+      6,
       0,
       "VIDEO"
     ]
@@ -640,10 +708,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.8,
+      "scale": 0.68,
       "offset": [
-        0,
-        -60
+        25,
+        27
       ]
     }
   },

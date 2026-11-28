@@ -1,7 +1,7 @@
 [project]
 name = "hashbidx-video"
 description = "Generate video in ComfyUI with your own HashBidX API key: Seedance 2.5 / 2.0, MiniMax H3 and Wan 3.0. Text-to-video, first/last frame, references, extend and edit a clip, camera and look presets, multi-shot prompts, shot writer, image generation."
-version = "0.5.3"
+version = "0.6.0"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
 dependencies = []

@@ -1,195 +1,250 @@
 {
-  "id": "571ac9d9-b71a-4459-a58a-2c625eb29f0d",
+  "id": "24a6646d-2b0b-4873-9c84-0308af5a66d6",
   "revision": 0,
-  "last_node_id": 5,
+  "last_node_id": 6,
   "last_link_id": 4,
   "nodes": [
     {
       "id": 1,
-      "type": "MarkdownNote",
+      "type": "HashBidXAPIKey",
       "pos": [
         90,
         150
       ],
       "size": [
         400,
-        250
+        172
       ],
       "flags": {},
       "order": 0,
       "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {},
-      "widgets_values": [
-        "**From an idea to a finished clip**\n\n1. Type your idea into **Shot Writer**, and set the length and the number of shots.\n2. Press **Run**. A HashBidX text model writes the shot list (shown in the box below it), and the video model films it as one clip.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run."
-      ],
-      "widgets_values_named": {
-        "text": "**From an idea to a finished clip**\n\n1. Type your idea into **Shot Writer**, and set the length and the number of shots.\n2. Press **Run**. A HashBidX text model writes the shot list (shown in the box below it), and the video model films it as one clip.\n\nNot happy with the shots? Press **Run** again for a new version, or copy the text into the video box and edit it by hand. The text model costs a fraction of a cent per run."
-      },
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 2,
-      "type": "HashBidXShotWriter",
-      "pos": [
-        90,
-        470
-      ],
-      "size": [
-        400,
-        280
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
       "inputs": [
         {
-          "localized_name": "hashbidx",
-          "name": "hashbidx",
-          "shape": 7,
-          "type": "HASHBIDX_AUTH",
-          "link": null
-        },
-        {
-          "localized_name": "idea",
-          "name": "idea",
+          "localized_name": "api_key",
+          "name": "api_key",
           "type": "STRING",
           "widget": {
-            "name": "idea"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "mode",
-          "name": "mode",
-          "type": "COMBO",
-          "widget": {
-            "name": "mode"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "total_seconds",
-          "name": "total_seconds",
-          "type": "INT",
-          "widget": {
-            "name": "total_seconds"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "shots",
-          "name": "shots",
-          "type": "INT",
-          "widget": {
-            "name": "shots"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "model",
-          "name": "model",
-          "type": "COMBO",
-          "widget": {
-            "name": "model"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "seed",
-          "name": "seed",
-          "shape": 7,
-          "type": "INT",
-          "widget": {
-            "name": "seed"
+            "name": "api_key"
           },
           "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "prompt",
-          "name": "prompt",
-          "type": "STRING",
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "type": "HASHBIDX_AUTH",
           "links": [
-            1,
-            3
+            1
           ]
         },
         {
-          "localized_name": "total_seconds",
-          "name": "total_seconds",
-          "type": "INT",
-          "links": [
-            2
-          ]
+          "localized_name": "status",
+          "name": "status",
+          "type": "STRING",
+          "links": null
         }
       ],
       "properties": {
-        "Node name for S&R": "HashBidXShotWriter"
+        "Node name for S&R": "HashBidXAPIKey"
       },
       "widgets_values": [
-        "A 10 second ad for an insulated steel water bottle on a snowy mountain hike",
-        "shot list (several shots in one clip)",
-        10,
-        3,
-        "deepseek-v4.1-flash-1017-global",
-        0,
-        "randomize"
+        ""
       ],
       "widgets_values_named": {
-        "idea": "A 10 second ad for an insulated steel water bottle on a snowy mountain hike",
-        "mode": "shot list (several shots in one clip)",
-        "total_seconds": 10,
-        "shots": 3,
-        "model": "deepseek-v4.1-flash-1017-global",
-        "seed": 0,
-        "control_after_generate": "randomize"
+        "api_key": ""
       }
     },
     {
-      "id": 3,
-      "type": "PreviewAny",
+      "id": 2,
+      "type": "MarkdownNote",
       "pos": [
         90,
-        820
+        382
       ],
       "size": [
         400,
-        300
+        370
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene.\n\n1. **Load Image** holds the reference picture. A sample still is loaded, so you can press **Run** right away.\n2. **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. In the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. Press **Run**.\n\nReferences cannot be combined with a first or last frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+      ],
+      "widgets_values_named": {
+        "text": "**Reference image to video**\n\nA reference picture keeps the same character, product or style in a new scene.\n\n1. **Load Image** holds the reference picture. A sample still is loaded, so you can press **Run** right away.\n2. **Reference Pack** passes it on. For several pictures of one character, type a folder path into **image_folder**.\n3. In the prompt, call the pictures **Image 1**, **Image 2** and so on, and describe the new scene.\n4. Press **Run**.\n\nReferences cannot be combined with a first or last frame.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "pos": [
+        550,
+        150
+      ],
+      "size": [
+        300,
+        330
       ],
       "flags": {},
       "order": 2,
       "mode": 0,
       "inputs": [
         {
-          "localized_name": "source",
-          "name": "source",
-          "type": "*",
-          "link": 3
+          "localized_name": "image",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "choose file to upload",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
-          "localized_name": "STRING",
-          "name": "STRING",
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "hashbidx_example_still.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "hashbidx_example_still.jpg",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 4,
+      "type": "HashBidXReferencePack",
+      "pos": [
+        910,
+        150
+      ],
+      "size": [
+        400,
+        260
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "localized_name": "image_folder",
+          "name": "image_folder",
+          "type": "STRING",
+          "widget": {
+            "name": "image_folder"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_images",
+          "name": "max_images",
+          "type": "INT",
+          "widget": {
+            "name": "max_images"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "video_urls",
+          "name": "video_urls",
+          "type": "STRING",
+          "widget": {
+            "name": "video_urls"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio_urls",
+          "name": "audio_urls",
+          "type": "STRING",
+          "widget": {
+            "name": "audio_urls"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "references",
+          "name": "references",
+          "type": "HASHBIDX_REFS",
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "image_count",
+          "name": "image_count",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "localized_name": "legend",
+          "name": "legend",
           "type": "STRING",
           "links": null
         }
       ],
       "properties": {
-        "Node name for S&R": "PreviewAny"
+        "Node name for S&R": "HashBidXReferencePack"
       },
-      "widgets_values": [],
-      "widgets_values_named": {}
+      "widgets_values": [
+        "",
+        9,
+        "",
+        ""
+      ],
+      "widgets_values_named": {
+        "image_folder": "",
+        "max_images": 9,
+        "video_urls": "",
+        "audio_urls": ""
+      }
     },
     {
-      "id": 4,
+      "id": 5,
       "type": "HashBidXVideo",
       "pos": [
-        550,
+        1370,
         150
       ],
       "size": [
@@ -197,7 +252,7 @@
         434
       ],
       "flags": {},
-      "order": 3,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
@@ -205,7 +260,7 @@
           "name": "hashbidx",
           "shape": 7,
           "type": "HASHBIDX_AUTH",
-          "link": null
+          "link": 1
         },
         {
           "localized_name": "camera",
@@ -240,7 +295,7 @@
           "name": "references",
           "shape": 7,
           "type": "HASHBIDX_REFS",
-          "link": null
+          "link": 3
         },
         {
           "localized_name": "model",
@@ -258,7 +313,7 @@
           "widget": {
             "name": "prompt"
           },
-          "link": 1
+          "link": null
         },
         {
           "localized_name": "duration",
@@ -267,7 +322,7 @@
           "widget": {
             "name": "duration"
           },
-          "link": 2
+          "link": null
         },
         {
           "localized_name": "resolution",
@@ -360,8 +415,8 @@
       },
       "widgets_values": [
         "dreamina-seedance-2-0-mini",
-        "",
-        10,
+        "The fox from Image 1 walks along a sandy beach at sunset, waves rolling in behind it. Wide shot, the camera tracks alongside the fox.",
+        5,
         "480p",
         "16:9",
         "off",
@@ -372,8 +427,8 @@
       ],
       "widgets_values_named": {
         "model": "dreamina-seedance-2-0-mini",
-        "prompt": "",
-        "duration": 10,
+        "prompt": "The fox from Image 1 walks along a sandy beach at sunset, waves rolling in behind it. Wide shot, the camera tracks alongside the fox.",
+        "duration": 5,
         "resolution": "480p",
         "ratio": "16:9",
         "audio": "off",
@@ -384,10 +439,10 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "SaveVideo",
       "pos": [
-        1040,
+        1860,
         150
       ],
       "size": [
@@ -395,7 +450,7 @@
         360
       ],
       "flags": {},
-      "order": 4,
+      "order": 5,
       "mode": 0,
       "inputs": [
         {
@@ -452,13 +507,13 @@
       ],
       "properties": {},
       "widgets_values": [
-        "hashbidx/idea",
+        "hashbidx/reference",
         "auto",
         "auto",
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "hashbidx/idea",
+        "filename_prefix": "hashbidx/reference",
         "format": "auto",
         "format.codec": "auto",
         "codec": "auto"
@@ -468,33 +523,33 @@
   "links": [
     [
       1,
-      2,
-      0,
-      4,
-      7,
-      "STRING"
-    ],
-    [
-      2,
-      2,
       1,
-      4,
-      8,
-      "INT"
+      0,
+      5,
+      0,
+      "HASHBIDX_AUTH"
     ],
     [
-      3,
       2,
-      0,
       3,
       0,
-      "STRING"
+      4,
+      0,
+      "IMAGE"
     ],
     [
-      4,
+      3,
       4,
       0,
       5,
+      5,
+      "HASHBIDX_REFS"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
       0,
       "VIDEO"
     ]
@@ -503,10 +558,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.8,
+      "scale": 0.6,
       "offset": [
-        0,
-        -60
+        40,
+        47
       ]
     }
   },

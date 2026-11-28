@@ -1,4 +1,4 @@
-from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS, hide_typed_keys
+from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS, add_key_routes, hide_typed_keys
 
 # Keep a key typed into the "HashBidX API Key" node out of saved videos, images and ComfyUI's run history.
 try:
@@ -7,6 +7,14 @@ try:
     PromptServer.instance.add_on_prompt_handler(hide_typed_keys)
 except Exception as e:
     print("[HashBidX] typed keys are not hidden from saved files on this ComfyUI: %s" % e)
+
+# The "HashBidX API Key" box shows whether a key is saved and has a "Verify and save key" button.
+try:
+    from server import PromptServer
+
+    add_key_routes(PromptServer.instance)
+except Exception as e:
+    print("[HashBidX] the key box works on Run only, without its button and status line: %s" % e)
 
 # The templates open with sample stills, so they run before you pick your own pictures.
 try:
@@ -28,7 +36,7 @@ try:
 except Exception as e:
     print("[HashBidX] could not place the sample stills in ComfyUI's input folder: %s" % e)
 
-# Front-end helpers: model-linked options and the key shown as dots (web/hashbidx.js).
+# Front-end helpers: model-linked options, the key shown as dots, the key box's button and status (web/hashbidx.js).
 WEB_DIRECTORY = "./web"
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

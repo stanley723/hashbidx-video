@@ -6,7 +6,9 @@ import time
 from .presets import (CAMERA_MOVES, COLOR_GRADES, DEPTHS, ERAS, GENRES, LENS_LOOKS, LIGHTING, PACING, SHOT_SIZES,
                       apply_camera)
 from .hashbidx_api import (Client, HashBidXError, download_url, image_file_to_data_uri, image_tensor_to_data_uri,
-                           resolve_credentials, user_config_path)
+                           key_tail, resolve_credentials, saved_key, user_config_path, verify_key)
+from .hashbidx_api import BAD_KEY, NO_KEY
+from .hashbidx_api import save_key as store_key
 
 # Model IDs as listed by GET /v1/models on hashbidx.ai (checked 2026-11-26).
 # Typical limits, for the README only; the API itself validates each model and returns a clear 400.
@@ -164,17 +166,15 @@ def hide_typed_keys(json_data):
 
 
 class HashBidXAPIKey:
-    """Holds the customer's own HashBidX key (BYOK). Leave empty to use the key saved on this computer."""
+    """The customer's own HashBidX key (BYOK). Paste it once: it is checked with HashBidX, saved on this computer and
+    the field is emptied again. Every HashBidX box connected to this one then uses the saved key."""
 
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "api_key": ("STRING", {"default": "", "multiline": False, "placeholder": "sk-hb-... (or leave empty to use config.json)"}),
-            },
-            "optional": {
-                "base_url": ("STRING", {"default": "https://hashbidx.ai/v1"}),
-                "save_key": ("BOOLEAN", {"default": False, "tooltip": "Save the key on this computer (ComfyUI/user/hashbidx/config.json). Then clear the field: the key stays saved and won't travel inside shared workflows."}),
+                "api_key": ("STRING", {"default": "", "multiline": False, "placeholder": "paste your key here (sk-hb-...)",
+                                       "tooltip": "Paste your HashBidX key and click 'Verify and save key'. It is saved on this computer; the field is emptied again so the key never travels inside a workflow you share."}),
             },
         }
 
@@ -182,38 +182,90 @@ class HashBidXAPIKey:
     RETURN_NAMES = ("hashbidx", "status")
     FUNCTION = "make"
     CATEGORY = "HashBidX"
-    OUTPUT_NODE = True  # lets "Run" save the key with this node alone: nothing is generated or charged
+    OUTPUT_NODE = True  # lets "Run" check and save the key with this box alone: nothing is generated or charged
 
-    def make(self, api_key, base_url="https://hashbidx.ai/v1", save_key=False):
+    @classmethod
+    def IS_CHANGED(cls, api_key="", **kwargs):
+        # run again when the key saved on this computer changes (for example from another canvas)
+        try:
+            saved = os.path.getmtime(user_config_path())
+        except Exception:
+            saved = 0
+        return "%s|%s" % (api_key, saved)
+
+    def make(self, api_key="", base_url="", save_key=True):
+        # base_url and save_key were fields of this box before 0.6.0; canvases saved then may still send them.
         if (api_key or "").startswith(_HIDDEN_PREFIX):
             if api_key not in _TYPED_KEYS:
                 raise HashBidXError("Please paste your HashBidX key into the api_key field again, or leave it empty to use the saved key.")
             api_key = _TYPED_KEYS[api_key]
-        typed = bool((api_key or "").strip())
+        typed = (api_key or "").strip()
+        status = connect_key(typed)["message"]
+        key, base = resolve_credentials(typed)
+        return {"ui": {"text": [status]}, "result": ({"api_key": key, "base_url": base}, status)}
+
+
+def connect_key(typed=""):
+    """Check a key with HashBidX and, if it was typed, save it on this computer. Used by the 'HashBidX API Key' box
+    when a canvas runs and by its 'Verify and save key' button. Raises HashBidXError with what to do when the key is
+    missing or refused."""
+    typed = (typed or "").strip()
+    key, base = resolve_credentials(typed)  # raises the "no key yet" message
+    verify_key(key, base)  # raises the "key not accepted" message
+    tail = key_tail(key)
+    ends = " (ends in %s)" % tail if tail else ""
+    if typed and typed != saved_key():
+        store_key(key)
+        print("[HashBidX] key verified and saved on this computer")
+        message = ("Key verified and saved on this computer%s. The field is emptied on purpose: every HashBidX box "
+                   "now uses the saved key." % ends)
+    else:
+        message = "Key verified. Every HashBidX box uses the key saved on this computer%s." % ends
+    return {"ok": True, "saved": True, "tail": tail, "message": message}
+
+
+def key_state():
+    """What the 'HashBidX API Key' box shows before anything runs. Never returns the key itself."""
+    key = saved_key()
+    if not key:
+        return {"saved": False, "tail": "",
+                "message": "No key yet. Paste your HashBidX key above and click 'Verify and save key'."}
+    tail = key_tail(key)
+    return {"saved": True, "tail": tail,
+            "message": "Every HashBidX box uses the key saved on this computer%s. To change it, paste a new key above "
+                       "and click 'Verify and save key'." % (" (ends in %s)" % tail if tail else "")}
+
+
+def add_key_routes(server):
+    """GET /hashbidx/key: is a key saved (last four characters only). POST /hashbidx/key: check and save a key."""
+    import asyncio
+
+    from aiohttp import web
+
+    @server.routes.get("/hashbidx/key")
+    async def _get_key(request):
+        return web.json_response(key_state())
+
+    @server.routes.post("/hashbidx/key")
+    async def _post_key(request):
         try:
-            key, base = resolve_credentials(api_key, base_url)
-        except HashBidXError:
-            # Nothing typed and nothing saved yet: say what to do in the status box instead of failing the run.
-            # A video node connected to this output still stops with the full "no key yet" message.
-            return ({"api_key": "", "base_url": (base_url or "").strip()},
-                    "No key yet. Paste your HashBidX key (it starts with sk-hb-) into the api_key field and press Run again.")
-        status = "Using the key typed in this node." if typed else "Using the key saved on this computer."
-        if save_key and typed:
-            path = user_config_path()
-            if path:
-                os.makedirs(os.path.dirname(path), exist_ok=True)
-                # created readable by this user only
-                fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
-                with os.fdopen(fd, "w", encoding="utf-8") as f:
-                    json.dump({"api_key": key, "base_url": base}, f)
-                print("[HashBidX] key saved to %s" % path)
-                status = ("Key saved on this computer. Now clear the api_key field: the saved key is used from here on "
-                          "and never travels inside workflows you share. Nothing was generated or charged.")
-            else:
-                status = "Could not find the ComfyUI user folder, so the key was not saved. Keep the key in this node instead."
-        elif save_key:
-            status = "Using the key saved on this computer. (The api_key field is empty, so there is nothing new to save.)"
-        return ({"api_key": key, "base_url": base}, status)
+            data = await request.json()
+        except Exception:
+            data = {}
+        typed = str((data or {}).get("api_key") or "")
+        try:
+            out = await asyncio.get_running_loop().run_in_executor(None, connect_key, typed)
+        except HashBidXError as e:
+            text = str(e).split("\nDetails:")[0]
+            if text.startswith(NO_KEY):
+                text = "No key yet. Paste your HashBidX key above and click 'Verify and save key'."
+            elif text.startswith(BAD_KEY):
+                text = ("HashBidX did not accept this key, so it was not saved. Copy the whole key again from "
+                        "hashbidx.ai > API Keys and paste it above.")
+            out = dict(key_state(), ok=False, message=text)
+        except Exception as e:
+            out = dict(key_state(), ok=False, message="Could not check the key: %s" % e)
+        return web.json_response(out)
 
 
 class HashBidXVideo:

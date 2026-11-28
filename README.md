@@ -12,36 +12,45 @@ No Comfy credits are used: generation is billed to your HashBidX account.
 
 No extra Python packages are needed.
 
+## Works with the rest of your ComfyUI
+HashBidX boxes use ComfyUI's standard connections, so they sit inside the workflows you already have, as the step that makes the final video:
+- **In:** any box that outputs an image (your local Flux or SDXL workflow, **Load Image**, a folder of character pictures) feeds `first_frame`, `last_frame` or the references. Any box that outputs text feeds the prompt.
+- **Out:** the video goes into any box that takes a video (upscaling, frame interpolation, colour, joining clips, **Save Video**), and the `last_frame` picture goes into any box that takes an image.
+
+Template **10 Use it in your own workflow** shows both sides. One limit today: a reference video or reference audio has to be a public https link; it cannot be read from a file on your computer yet.
+
 ## Add your key (once)
 1. Get a key on the **API Keys** page at https://hashbidx.ai.
-2. In ComfyUI open **Templates**, choose **hashbidx-video** at the bottom of the list, and open **1 Save your HashBidX key**.
-3. Paste the key into **api_key** (it shows as dots), leave **save_key** on, and press **Run**. Nothing is generated or charged. If you press Run with the field empty, the box simply tells you to paste your key.
-4. Clear the key field. The key stays saved on this computer (`ComfyUI/user/hashbidx/config.json`), survives plug-in updates, and never travels inside workflows you share.
+2. In ComfyUI open **Templates**, choose **hashbidx-video** at the bottom of the list, and open any template, for example **01 Text to video**.
+3. The **HashBidX API Key** box is at the top left of every template, with a line to each box that uses the key. Paste the key into **api_key** (it shows as dots) and click **Verify and save key**.
+4. The key is checked with HashBidX, saved on this computer and the field is emptied again. The box now shows the last four characters of the saved key, in every template. Nothing is generated or charged by this step.
 
-A key typed into the **HashBidX API Key** node is never written into the videos and images ComfyUI saves, or into its run history. It is only kept in a workflow file if you save the workflow while the field is filled, so clear the field once the key is saved.
+If you press **Run** with a key in the field instead, the same happens before anything is generated. If the key is missing or HashBidX refuses it, the run stops at this box and tells you what to do; nothing is charged.
+
+The key lives in `ComfyUI/user/hashbidx/config.json`, survives plug-in updates, and is never written into workflow files, into the videos and images ComfyUI saves, or into its run history. A HashBidX box that is not connected to the key box uses the saved key as well.
 
 ## Quick start
-Open **Templates > hashbidx-video** and pick one:
+Open **Templates > hashbidx-video** and pick one. The cards are numbered 01 to 10:
 
 | Template | What it does |
 |---|---|
-| **1 Save your HashBidX key** | Saves your key on this computer. Run it once. |
-| **2 Text to video** | A prompt in, a clip out. |
-| **3 Image to video** | Opens with a sample still so it runs right away. Pick your own picture in **Load Image**, describe the motion, press **Run**. |
-| **4 Two-shot chain with camera presets** | A timed two-shot prompt with camera presets, then a second clip that continues from the first clip's last frame. |
-| **5 First and last frame** | You give the first and the last picture; the model films the motion between them. Opens with two sample stills. |
-| **6 Keep a character or product** | A reference picture keeps the same character, product or style in a new scene. Opens with a sample still. |
-| **7 Extend a clip** | Makes a clip, then continues it. The result plays as one longer clip. |
-| **8 Edit a clip** | Makes a clip, then changes one thing in it and keeps the rest. Shows before and after. |
-| **9 Idea to shots to video** | Type an idea; a text model writes the shot list and the video model films it. |
-| **10 Picture first, then video** | Makes the opening picture from a prompt, then films it. |
+| **01 Text to video** | A prompt in, a clip out. |
+| **02 Image to video** | Opens with a sample still so it runs right away. Pick your own picture in **Load Image**, describe the motion, press **Run**. |
+| **03 First and last frame to video** | You give the first and the last picture; the model films the motion between them. Opens with two sample stills. |
+| **04 Reference image to video** | A reference picture keeps the same character, product or style in a new scene. Opens with a sample still. |
+| **05 Multi-shot video with camera control** | A timed multi-shot prompt with camera presets, then a second clip that continues from the first clip's last frame. |
+| **06 Extend a video** | Makes a clip, then continues it. The result plays as one longer clip. |
+| **07 Edit a video** | Makes a clip, then changes one thing in it and keeps the rest. Shows before and after. |
+| **08 Idea to storyboard to video** | Type an idea; a text model writes the shot list and the video model films it. |
+| **09 Text to image to video** | Makes the opening picture from a prompt, then films it. |
+| **10 Use it in your own workflow** | A picture is prepared by a standard ComfyUI box, filmed by HashBidX, and the clip is enlarged by standard ComfyUI boxes. Swap them for your own. |
 
 The finished clip plays in the **Save Video** node and is saved to `ComfyUI/output/hashbidx/`. The same files are in this plug-in's `example_workflows` folder if you prefer to drag them onto the canvas.
 
 ## Nodes
 | Node | What it does |
 |---|---|
-| **HashBidX API Key** | Holds your key. Save it once, then leave the field empty. |
+| **HashBidX API Key** | Paste your key once and click **Verify and save key**: it is checked, saved on this computer and the field is emptied. The box shows the last four characters of the saved key. Connect `hashbidx` to every box that calls the API. |
 | **HashBidX Video (Seedance / H3 / Wan)** | Generates the clip: text-to-video, image-to-video, first + last frame, or references. Outputs the video and its **last frame**. |
 | **HashBidX Camera & Lens** | Dropdowns for shot size, camera move (and a second move that follows it), lens look, depth of field, lighting, genre, era look, colour grade and pacing. Connect `camera` to the Video node. |
 | **HashBidX Multi-Shot Prompt** | Write up to 4 shots with seconds each; it builds one timed prompt for cuts inside a single clip. Connect `prompt` to the Video node's prompt and use `total_seconds` as the duration. |

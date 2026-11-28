@@ -1,0 +1,1173 @@
+{
+  "id": "9b669107-4cc1-42c7-ab21-7a4d6ac9ad79",
+  "revision": 0,
+  "last_node_id": 9,
+  "last_link_id": 8,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "HashBidXAPIKey",
+      "pos": [
+        90,
+        150
+      ],
+      "size": [
+        400,
+        172
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "api_key",
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "type": "HASHBIDX_AUTH",
+          "links": [
+            1,
+            2
+          ]
+        },
+        {
+          "localized_name": "status",
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXAPIKey"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "api_key": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        90,
+        382
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "**Multi-shot video with camera control**\n\n1. **Multi-Shot Prompt** holds the shots and their seconds. Edit the text to change the story.\n2. **Camera & Lens** (one per clip) sets shot size, camera move, lens and lighting from lists.\n3. Press **Run**. Clip 1 hands its **last_frame** to clip 2 as the first frame, so the two clips continue each other.\n\nSwap models, shots and presets freely.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+      ],
+      "widgets_values_named": {
+        "text": "**Multi-shot video with camera control**\n\n1. **Multi-Shot Prompt** holds the shots and their seconds. Edit the text to change the story.\n2. **Camera & Lens** (one per clip) sets shot size, camera move, lens and lighting from lists.\n3. Press **Run**. Clip 1 hands its **last_frame** to clip 2 as the first frame, so the two clips continue each other.\n\nSwap models, shots and presets freely.\n\n**First time?** Paste your HashBidX key into the **HashBidX API Key** box above and click **Verify and save key**. The box then shows the last four characters of the saved key, and every template is ready to run."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 3,
+      "type": "HashBidXMultiShot",
+      "pos": [
+        550,
+        150
+      ],
+      "size": [
+        400,
+        420
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "style",
+          "name": "style",
+          "type": "STRING",
+          "widget": {
+            "name": "style"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "shot_1",
+          "name": "shot_1",
+          "type": "STRING",
+          "widget": {
+            "name": "shot_1"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seconds_1",
+          "name": "seconds_1",
+          "type": "INT",
+          "widget": {
+            "name": "seconds_1"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "shot_2",
+          "name": "shot_2",
+          "type": "STRING",
+          "widget": {
+            "name": "shot_2"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seconds_2",
+          "name": "seconds_2",
+          "type": "INT",
+          "widget": {
+            "name": "seconds_2"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "shot_3",
+          "name": "shot_3",
+          "type": "STRING",
+          "widget": {
+            "name": "shot_3"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seconds_3",
+          "name": "seconds_3",
+          "type": "INT",
+          "widget": {
+            "name": "seconds_3"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "shot_4",
+          "name": "shot_4",
+          "type": "STRING",
+          "widget": {
+            "name": "shot_4"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seconds_4",
+          "name": "seconds_4",
+          "type": "INT",
+          "widget": {
+            "name": "seconds_4"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        },
+        {
+          "localized_name": "total_seconds",
+          "name": "total_seconds",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXMultiShot"
+      },
+      "widgets_values": [
+        "A red fox in a snowy pine forest at sunrise, photoreal nature documentary.",
+        "The fox lifts its head and looks toward the camera.",
+        2,
+        "The fox turns and trots off between the trees, kicking up powder snow.",
+        3,
+        "",
+        0,
+        "",
+        0
+      ],
+      "widgets_values_named": {
+        "style": "A red fox in a snowy pine forest at sunrise, photoreal nature documentary.",
+        "shot_1": "The fox lifts its head and looks toward the camera.",
+        "seconds_1": 2,
+        "shot_2": "The fox turns and trots off between the trees, kicking up powder snow.",
+        "seconds_2": 3,
+        "shot_3": "",
+        "seconds_3": 0,
+        "shot_4": "",
+        "seconds_4": 0
+      }
+    },
+    {
+      "id": 4,
+      "type": "HashBidXCamera",
+      "pos": [
+        1010,
+        150
+      ],
+      "size": [
+        283,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "shot_size",
+          "name": "shot_size",
+          "type": "COMBO",
+          "widget": {
+            "name": "shot_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_move",
+          "name": "camera_move",
+          "type": "COMBO",
+          "widget": {
+            "name": "camera_move"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lens_look",
+          "name": "lens_look",
+          "type": "COMBO",
+          "widget": {
+            "name": "lens_look"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "depth_of_field",
+          "name": "depth_of_field",
+          "type": "COMBO",
+          "widget": {
+            "name": "depth_of_field"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lighting",
+          "name": "lighting",
+          "type": "COMBO",
+          "widget": {
+            "name": "lighting"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "second_move",
+          "name": "second_move",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "second_move"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "genre",
+          "name": "genre",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "genre"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "era_look",
+          "name": "era_look",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "era_look"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_grade",
+          "name": "color_grade",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "color_grade"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pacing",
+          "name": "pacing",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "pacing"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "type": "HASHBIDX_CAMERA",
+          "links": [
+            4
+          ]
+        },
+        {
+          "localized_name": "camera_text",
+          "name": "camera_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXCamera"
+      },
+      "widgets_values": [
+        "medium shot",
+        "slow push in",
+        "anamorphic",
+        "shallow (f/1.4)",
+        "golden hour",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "widgets_values_named": {
+        "shot_size": "medium shot",
+        "camera_move": "slow push in",
+        "lens_look": "anamorphic",
+        "depth_of_field": "shallow (f/1.4)",
+        "lighting": "golden hour",
+        "second_move": "none",
+        "genre": "none",
+        "era_look": "none",
+        "color_grade": "none",
+        "pacing": "none"
+      }
+    },
+    {
+      "id": 5,
+      "type": "HashBidXVideo",
+      "pos": [
+        1360,
+        150
+      ],
+      "size": [
+        430,
+        434
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": 1
+        },
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "shape": 7,
+          "type": "HASHBIDX_CAMERA",
+          "link": 4
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "reference_images",
+          "name": "reference_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "references",
+          "name": "references",
+          "shape": 7,
+          "type": "HASHBIDX_REFS",
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 3
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extra_params_json",
+          "name": "extra_params_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "extra_params_json"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_wait_seconds",
+          "name": "max_wait_seconds",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_wait_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            7
+          ]
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXVideo"
+      },
+      "widgets_values": [
+        "dreamina-seedance-2-0-mini",
+        "",
+        5,
+        "480p",
+        "auto",
+        "off",
+        "",
+        1200,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "dreamina-seedance-2-0-mini",
+        "prompt": "",
+        "duration": 5,
+        "resolution": "480p",
+        "ratio": "auto",
+        "audio": "off",
+        "extra_params_json": "",
+        "max_wait_seconds": 1200,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 6,
+      "type": "HashBidXCamera",
+      "pos": [
+        1010,
+        790
+      ],
+      "size": [
+        283,
+        300
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "shot_size",
+          "name": "shot_size",
+          "type": "COMBO",
+          "widget": {
+            "name": "shot_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_move",
+          "name": "camera_move",
+          "type": "COMBO",
+          "widget": {
+            "name": "camera_move"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lens_look",
+          "name": "lens_look",
+          "type": "COMBO",
+          "widget": {
+            "name": "lens_look"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "depth_of_field",
+          "name": "depth_of_field",
+          "type": "COMBO",
+          "widget": {
+            "name": "depth_of_field"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "lighting",
+          "name": "lighting",
+          "type": "COMBO",
+          "widget": {
+            "name": "lighting"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "second_move",
+          "name": "second_move",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "second_move"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "genre",
+          "name": "genre",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "genre"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "era_look",
+          "name": "era_look",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "era_look"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_grade",
+          "name": "color_grade",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "color_grade"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pacing",
+          "name": "pacing",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "pacing"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "type": "HASHBIDX_CAMERA",
+          "links": [
+            6
+          ]
+        },
+        {
+          "localized_name": "camera_text",
+          "name": "camera_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXCamera"
+      },
+      "widgets_values": [
+        "wide shot",
+        "crane up",
+        "anamorphic",
+        "none",
+        "golden hour",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "widgets_values_named": {
+        "shot_size": "wide shot",
+        "camera_move": "crane up",
+        "lens_look": "anamorphic",
+        "depth_of_field": "none",
+        "lighting": "golden hour",
+        "second_move": "none",
+        "genre": "none",
+        "era_look": "none",
+        "color_grade": "none",
+        "pacing": "none"
+      }
+    },
+    {
+      "id": 7,
+      "type": "HashBidXVideo",
+      "pos": [
+        1360,
+        790
+      ],
+      "size": [
+        430,
+        434
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "hashbidx",
+          "name": "hashbidx",
+          "shape": 7,
+          "type": "HASHBIDX_AUTH",
+          "link": 2
+        },
+        {
+          "localized_name": "camera",
+          "name": "camera",
+          "shape": 7,
+          "type": "HASHBIDX_CAMERA",
+          "link": 6
+        },
+        {
+          "localized_name": "first_frame",
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "reference_images",
+          "name": "reference_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "references",
+          "name": "references",
+          "shape": 7,
+          "type": "HASHBIDX_REFS",
+          "link": null
+        },
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "COMBO",
+          "widget": {
+            "name": "model"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "duration",
+          "name": "duration",
+          "type": "INT",
+          "widget": {
+            "name": "duration"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ratio",
+          "name": "ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "extra_params_json",
+          "name": "extra_params_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "extra_params_json"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_wait_seconds",
+          "name": "max_wait_seconds",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "max_wait_seconds"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            8
+          ]
+        },
+        {
+          "localized_name": "last_frame",
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "localized_name": "file_path",
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "task_id",
+          "name": "task_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "HashBidXVideo"
+      },
+      "widgets_values": [
+        "wan3.0-video",
+        "The fox disappears into the forest as the camera rises above the snowy treetops.",
+        3,
+        "480p",
+        "auto",
+        "off",
+        "",
+        1200,
+        0,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "model": "wan3.0-video",
+        "prompt": "The fox disappears into the forest as the camera rises above the snowy treetops.",
+        "duration": 3,
+        "resolution": "480p",
+        "ratio": "auto",
+        "audio": "off",
+        "extra_params_json": "",
+        "max_wait_seconds": 1200,
+        "seed": 0,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 8,
+      "type": "SaveVideo",
+      "pos": [
+        1850,
+        150
+      ],
+      "size": [
+        420,
+        330
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 7
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "hashbidx/shot1",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "hashbidx/shot1",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    },
+    {
+      "id": 9,
+      "type": "SaveVideo",
+      "pos": [
+        1850,
+        790
+      ],
+      "size": [
+        420,
+        330
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 8
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "hashbidx/shot2",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "hashbidx/shot2",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      5,
+      0,
+      "HASHBIDX_AUTH"
+    ],
+    [
+      2,
+      1,
+      0,
+      7,
+      0,
+      "HASHBIDX_AUTH"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      7,
+      "STRING"
+    ],
+    [
+      4,
+      4,
+      0,
+      5,
+      1,
+      "HASHBIDX_CAMERA"
+    ],
+    [
+      5,
+      5,
+      1,
+      7,
+      2,
+      "IMAGE"
+    ],
+    [
+      6,
+      6,
+      0,
+      7,
+      1,
+      "HASHBIDX_CAMERA"
+    ],
+    [
+      7,
+      5,
+      0,
+      8,
+      0,
+      "VIDEO"
+    ],
+    [
+      8,
+      7,
+      0,
+      9,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.61,
+      "offset": [
+        38,
+        44
+      ]
+    }
+  },
+  "version": 0.4
+}
